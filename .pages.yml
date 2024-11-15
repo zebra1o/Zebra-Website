@@ -40,4 +40,4 @@ content:
       - name: Date
         type: date
         options:
-          format: MM/yyyy
+          format: yyyy-MM-dd
