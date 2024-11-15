@@ -6,6 +6,14 @@ content:
   - name: works
     label: "Works"
     type: collection
+    view:
+      fields: [ title, image ]
+      primary: title
+      sort: [ date, title ]
+      default:
+        search: ''
+        sort: date
+        order: desc
     path: "src/lib/works"
     fields:
       - name: title
