@@ -35,5 +35,8 @@
 	"dependencies": {
 		"gsap": "^3.12.5"
 	},
-	"packageManager": "pnpm@9.12.1"
+	"packageManager": "pnpm@9.12.1",
+	"engines": {
+		"node": ">=20.0.0"
+	}
 }
