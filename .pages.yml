@@ -11,12 +11,15 @@ content:
       - name: title
         label: "Title"
         type: string
+        required: true
       - name: image
         label: "Image"
         type: image
-      - name: tag
-        label: Tag
+        required: true
+      - name: tags
+        label: Tags
         type: select
+        list: true
         options:
           values: [ 3D, Print, Sculpture, Paint, Digital, Extra ]
       - name: description
