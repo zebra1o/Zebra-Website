@@ -31,7 +31,7 @@ content:
           min: 1
           max: 4
         options:
-          values: [ 3D, Print, Sculpture, Paint, Digital, Extra ]
+          values: [ 3D, Print, Sculpture, Paint, Digital, Extra, Illustration, Mixed Media ]
       - name: Date
         type: string
       - name: description
