@@ -33,7 +33,7 @@ content:
         options:
           values: [ 3D, Print, Sculpture, Paint, Digital, Extra ]
       - name: Date
-        type: text
+        type: string
       - name: description
         label: "Description"
         type: rich-text
