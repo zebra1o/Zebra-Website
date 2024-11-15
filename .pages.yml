@@ -19,7 +19,9 @@ content:
       - name: tags
         label: Tags
         type: select
-        list: true
+        list:
+          min: 1
+          max: 4
         options:
           values: [ 3D, Print, Sculpture, Paint, Digital, Extra ]
       - name: description
