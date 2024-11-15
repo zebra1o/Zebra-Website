@@ -79,6 +79,53 @@
 			});
 	}
 
+	function cleanupScene(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
+		// Stop any ongoing animations first
+		if (typeof window !== 'undefined') {
+			window.cancelAnimationFrame(frameId);
+		}
+
+		// Dispose of geometries and materials
+		scene.traverse((object) => {
+			if (object instanceof THREE.Mesh) {
+				if (object.geometry) {
+					object.geometry.dispose();
+				}
+
+				if (object.material) {
+					if (Array.isArray(object.material)) {
+						object.material.forEach((material) => {
+							if (material.map) material.map.dispose();
+							material.dispose();
+						});
+					} else {
+						if (object.material.map) object.material.map.dispose();
+						object.material.dispose();
+					}
+				}
+			}
+		});
+
+		// Clear scene
+		while (scene.children.length > 0) {
+			scene.remove(scene.children[0]);
+		}
+
+		// Remove the canvas from DOM before disposing
+		if (renderer.domElement.parentNode) {
+			renderer.domElement.parentNode.removeChild(renderer.domElement);
+		}
+
+		// Dispose of renderer without forcing context loss
+		renderer.dispose();
+
+		// Clear any references
+		scene.clear();
+	}
+
+	// Add frameId to track animation frame
+	let frameId: number;
+
 	onMount(() => {
 		if (!props.modelUrl) return;
 
@@ -89,7 +136,7 @@
 		});
 
 		function animate() {
-			requestAnimationFrame(animate);
+			frameId = requestAnimationFrame(animate);
 			controls.update();
 			renderer.render(scene, camera);
 		}
@@ -109,13 +156,13 @@
 
 		return () => {
 			resizeObserver.disconnect();
-			renderer.dispose();
 			controls.dispose();
+			cleanupScene(scene, renderer);
 		};
 	});
 </script>
 
-<div class="relative w-full" style="height: {props.height}" bind:this={container}>
+<div class="w-ful relative h-full" bind:this={container}>
 	{#if state.loading}
 		<div class="absolute inset-0 z-10 flex items-center justify-center bg-gray-100">
 			<div class="text-gray-600">Loading...</div>

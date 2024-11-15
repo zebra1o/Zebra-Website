@@ -23,8 +23,8 @@
 	</div>
 
 	{#if viewerType() === 'splat'}
-		<SplatViewer modelUrl={props.modelUrl} height={props.height || '400px'} />
+		<SplatViewer modelUrl={props.modelUrl} />
 	{:else if viewerType() === 'gltf'}
-		<GLTFViewer modelUrl={props.modelUrl} height={props.height || '400px'} />
+		<GLTFViewer modelUrl={props.modelUrl} />
 	{/if}
 </div>

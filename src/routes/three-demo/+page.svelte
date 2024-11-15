@@ -96,78 +96,56 @@
 					class="absolute inset-0 flex items-center justify-center bg-black/0 transition-all group-hover:bg-black/20"
 				>
 					<span
-						class="rounded-full bg-black/50 px-4 py-2 text-sm text-white opacity-0 transition-all group-hover:opacity-100"
+						class="rounded-full px-4 py-2 text-sm text-white opacity-0 transition-all group-hover:opacity-100"
 						>View Model</span
 					>
 				</div>
 			</button>
 		{/each}
 	</div>
-
-	<!-- Modal Dialog -->
-	<dialog
-		bind:this={dialog}
-		class="fixed inset-0 m-0 h-screen w-screen bg-transparent p-0"
-		onclose={handleDialogClose}
-	>
-		<div class="relative h-full w-full">
-			<!-- Controls -->
-			<div class="fixed right-8 top-8 z-[60]">
-				<button
-					type="button"
-					aria-label="Close dialog"
-					onclick={handleDialogClose}
-					class="rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<path d="M18 6 6 18" />
-						<path d="m6 6 12 12" />
-					</svg>
-				</button>
-			</div>
-
-			{#if selectedModel}
-				<!-- Model Container -->
-				<div class="flex h-full w-full items-center justify-center bg-gray-900/95 p-4">
-					<div class="h-full max-h-[85vh] w-full max-w-7xl rounded-lg">
-						<ThreeViewer
-							title={selectedModel.title}
-							description={selectedModel.description}
-							modelUrl={selectedModel.url}
-							height="100%"
-						/>
-					</div>
-				</div>
-			{/if}
-		</div>
-	</dialog>
 </div>
+<!-- Modal Dialog -->
+<dialog bind:this={dialog} class="h-full w-full bg-black/50" onclose={handleDialogClose}>
+	<div class="relative h-full w-full">
+		<!-- Controls -->
+		<div class="fixed right-8 top-8 z-[60]">
+			<button
+				type="button"
+				aria-label="Close dialog"
+				onclick={handleDialogClose}
+				class="rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path d="M18 6 6 18" />
+					<path d="m6 6 12 12" />
+				</svg>
+			</button>
+		</div>
+
+		{#if selectedModel}
+			<!-- Model Container -->
+			<div class="flex h-full w-full items-center justify-center">
+				<ThreeViewer
+					title={selectedModel.title}
+					description={selectedModel.description}
+					modelUrl={selectedModel.url}
+				/>
+			</div>
+		{/if}
+	</div>
+</dialog>
 
 <style>
-	dialog {
-		background-color: transparent;
-		border: none;
-		padding: 0;
-		max-width: 100vw;
-		max-height: 100vh;
-		margin: 0;
-		color-scheme: normal;
-	}
-
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.8);
-	}
-
 	:global(*:focus) {
 		outline: none !important;
 		box-shadow: none !important;
