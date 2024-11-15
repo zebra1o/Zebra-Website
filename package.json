@@ -33,7 +33,10 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
-		"gsap": "^3.12.5"
+		"@mkkellogg/gaussian-splats-3d": "^0.4.5",
+		"@types/three": "^0.170.0",
+		"gsap": "^3.12.5",
+		"three": "^0.170.0"
 	},
 	"packageManager": "pnpm@9.12.1",
 	"engines": {
