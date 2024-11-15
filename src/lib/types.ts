@@ -5,5 +5,5 @@ export interface WorkMetadata {
     image: string;
     tags: WorkTag[];
     description?: string;  // Optional since not marked as required in config
-    date: string;  // Will store date in dd-MM-yyyy format per config
+    Date: string;  // Now a free-form string field
 }

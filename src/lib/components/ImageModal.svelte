@@ -114,7 +114,7 @@
 							{/if}
 						</div>
 
-						<p class="mt-4 text-sm text-gray-300">{$selectedWork.date}</p>
+						<p class="mt-4 text-sm text-gray-300">{$selectedWork.Date}</p>
 
 						{#if $selectedWork.description}
 							<div class="mt-4 text-sm description-content">
