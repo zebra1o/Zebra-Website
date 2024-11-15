@@ -14,6 +14,11 @@ content:
       - name: image
         label: "Image"
         type: image
+      - name: tag
+        label: Tag
+        type: select
+        options:
+          values: [ 3D, Print, Sculpture, Paint, Digital, Extra ]
       - name: description
         label: "Description"
         type: rich-text
