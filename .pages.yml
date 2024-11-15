@@ -1,0 +1,22 @@
+media:
+  input: static/media  # Shared media folder used by both Pages CMS and SvelteKit
+  output: /media
+
+content:
+  - name: works
+    label: "Works"
+    type: collection
+    path: "src/lib/works"
+    fields:
+      - name: title
+        label: "Title"
+        type: string
+      - name: image
+        label: "Image"
+        type: image
+      - name: description
+        label: "Description"
+        type: rich-text
+      - name: year
+        label: "Year"
+        type: number
