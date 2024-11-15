@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Work from '$lib/components/Work.svelte';
-	import { works } from './works.svelte';
-	import { isLoading } from '$lib/stores/loading';
+	import { works } from '$lib/components/works.svelte';
+	import { isLoading } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { cacheImages } from '$lib/utils/imageCache';
+	import ImageModal from '$lib/components/ImageModal.svelte';
 
 	let loadedImages = 0;
 	const totalImages = works.length;
@@ -42,6 +43,11 @@
 		</div>
 	</div>
 {/if}
+
+
+<ImageModal
+/>
+
 
 <div class="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
 	<div class="overflow-container relative h-full w-full">

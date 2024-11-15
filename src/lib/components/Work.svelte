@@ -2,14 +2,13 @@
 	import { gsap, Draggable } from '$lib/gsap.config';
 	import { untrack } from 'svelte';
 	import type { WorkMetadata } from '$lib/types';
-	import ImageModal from './ImageModal.svelte';
 	import { getCachedImage } from '$lib/utils/imageCache';
+	import { selectedWork, openModal } from '$lib/stores';
 
 	let { onLoaded, work } = $props<{ onLoaded: () => void; work: WorkMetadata }>();
 
 	let cardElement: HTMLButtonElement | null = $state(null);
 	let draggableInstance: Draggable[] | null = $state(null);
-	let isModalOpen = $state(false);
 	let isDragging = $state(false);
 	let wasDragging = $state(false);
 
@@ -49,7 +48,8 @@
 
 	function handleClick() {
 		if (!wasDragging) {
-			isModalOpen = true;
+			$selectedWork = work;
+			$openModal = true;
 		}
 	}
 
@@ -152,12 +152,3 @@
 		<img src={work.image} alt={work.title} class="h-full w-full object-contain" />
 	</div>
 </button>
-
-<ImageModal
-	src={work.image}
-	alt={work.title}
-	isOpen={isModalOpen}
-	onclose={() => {
-		isModalOpen = false;
-	}}
-/>
