@@ -4,6 +4,36 @@
 
 	let showInfo = $state(false);
 	let dialog: HTMLDialogElement | null = $state(null);
+	let parsedDescription = $state('');
+
+	$effect(() => {
+		if ($selectedWork?.description) {
+			// Simple markdown parsing for client-side
+			parsedDescription = $selectedWork.description
+				// Headers
+				.replace(/^### (.*$)/gm, '<h3>$1</h3>')
+				.replace(/^## (.*$)/gm, '<h2>$1</h2>')
+				.replace(/^# (.*$)/gm, '<h1>$1</h1>')
+				// Bold
+				.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+				// Italic
+				.replace(/\*(.*?)\*/g, '<em>$1</em>')
+				// Links
+				.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+				// Lists
+				.replace(/^\s*\n\*/gm, '<ul>\n*')
+				.replace(/^(\*.+)\s*\n([^\*])/gm, '$1\n</ul>\n$2')
+				.replace(/^\*(.+)/gm, '<li>$1</li>')
+				// Code
+				.replace(/`([^`]+)`/g, '<code>$1</code>')
+				// Paragraphs
+				.replace(/^\s*(\n)?(.+)/gm, function(m) {
+					return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img)/.test(m) ? m : '<p>'+m+'</p>';
+				})
+				// Line breaks
+				.replace(/\n/g, '<br>');
+		}
+	});
 
 	$effect(() => {
 		if ($openModal && dialog) {
@@ -103,8 +133,10 @@
 							{/each}
 						</div>
 					{/if}
-					{#if $selectedWork.description}
-						<p class="text-sm text-gray-200">{$selectedWork.description}</p>
+					{#if parsedDescription}
+						<div class="prose prose-sm prose-invert max-w-none">
+							{@html parsedDescription}
+						</div>
 					{/if}
 					<p class="mt-2 text-sm text-gray-300">{$selectedWork.date}</p>
 				</div>
@@ -153,5 +185,51 @@
 
 	dialog:focus {
 		outline: none;
+	}
+
+	:global(.prose) {
+		color: rgb(229 231 235); /* text-gray-200 */
+	}
+
+	:global(.prose strong) {
+		color: white;
+	}
+
+	:global(.prose a) {
+		color: rgb(96 165 250); /* text-blue-400 */
+	}
+
+	:global(.prose p) {
+		margin: 0.5rem 0;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+	}
+
+	:global(.prose h1, .prose h2, .prose h3, .prose h4) {
+		color: white;
+		margin: 1rem 0 0.5rem;
+	}
+
+	:global(.prose ul, .prose ol) {
+		margin: 0.5rem 0;
+		padding-left: 1.5rem;
+	}
+
+	:global(.prose li) {
+		margin: 0.25rem 0;
+	}
+
+	:global(.prose code) {
+		color: rgb(199 210 254);
+		background: rgba(0, 0, 0, 0.2);
+		padding: 0.125rem 0.25rem;
+		border-radius: 0.25rem;
+	}
+
+	:global(.prose pre) {
+		background: rgba(0, 0, 0, 0.2);
+		padding: 1rem;
+		border-radius: 0.5rem;
+		overflow-x: auto;
 	}
 </style>
