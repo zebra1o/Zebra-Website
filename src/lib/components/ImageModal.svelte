@@ -114,12 +114,13 @@
 							{/if}
 						</div>
 
+						<p class="mt-4 text-sm text-gray-300">{$selectedWork.date}</p>
+
 						{#if $selectedWork.description}
-							<div class="mt-4 text-sm">
+							<div class="mt-4 text-sm description-content">
 								{@html $selectedWork.description}
 							</div>
 						{/if}
-						<p class="mt-4 text-sm text-gray-300">{$selectedWork.date}</p>
 					</div>
 				</div>
 			{/if}
@@ -128,43 +129,107 @@
 </dialog>
 
 <style>
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.8);
-		backdrop-filter: blur(3px);
-		animation: fade-in 0.3s ease-out;
-	}
-
-	dialog[open] {
-		animation: slide-in 0.3s ease-out;
-	}
-
-	@keyframes fade-in {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-
-	@keyframes slide-in {
-		from {
-			transform: translateY(10%);
-			opacity: 0;
-		}
-		to {
-			transform: translateY(0);
-			opacity: 1;
-		}
-	}
-
-	/* Remove default dialog styles */
+	/* Base dialog styles */
 	dialog {
+		background-color: transparent;
 		border: none;
 		padding: 0;
+		max-width: 100vw;
+		max-height: 100vh;
+		margin: 0;
+		color-scheme: normal;
 	}
 
-	dialog:focus {
-		outline: none;
+	dialog::backdrop {
+		background: rgba(0, 0, 0, 0.8);
+	}
+
+	/* Remove all default focus states */
+	:global(*:focus) {
+		outline: none !important;
+		box-shadow: none !important;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	:global(*:focus-visible) {
+		outline: none !important;
+		box-shadow: none !important;
+	}
+
+	:global(button:focus) {
+		outline: none !important;
+	}
+
+	:global(img:focus) {
+		outline: none !important;
+	}
+
+	/* Description Content Styles */
+	:global(.description-content) {
+		/* Spacing */
+		line-height: 1.6;
+
+		/* Text styles */
+		color: rgb(229 231 235);
+	}
+
+	:global(.description-content h1) {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 1rem;
+		color: white;
+	}
+
+	:global(.description-content p) {
+		margin: 0.75rem 0;
+	}
+
+	:global(.description-content strong) {
+		color: white;
+		font-weight: 600;
+	}
+
+	:global(.description-content em) {
+		color: rgb(209 213 219);
+	}
+
+	:global(.description-content s) {
+		color: rgb(156 163 175);
+	}
+
+	:global(.description-content ol) {
+		list-style-type: decimal;
+		padding-left: 1.5rem;
+		margin: 1rem 0;
+	}
+
+	:global(.description-content li) {
+		margin: 0.5rem 0;
+	}
+
+	:global(.description-content li p) {
+		margin: 0;
+	}
+
+	:global(.description-content blockquote) {
+		border-left: 3px solid rgb(75 85 99);
+		padding-left: 1rem;
+		margin: 1rem 0;
+		font-style: italic;
+	}
+
+	:global(.description-content img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: 0.5rem;
+		margin: 1rem auto;
+	}
+
+	:global([style*="text-align: center"]) {
+		text-align: center;
+	}
+
+	:global([style*="text-align: justify"]) {
+		text-align: justify;
 	}
 </style>
