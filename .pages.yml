@@ -17,6 +17,7 @@ content:
       - name: description
         label: "Description"
         type: rich-text
-      - name: year
-        label: "Year"
-        type: number
+      - name: Date
+        type: date
+        options:
+          format: dd-MM-yyyy
