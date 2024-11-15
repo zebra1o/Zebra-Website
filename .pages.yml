@@ -32,12 +32,10 @@ content:
           max: 4
         options:
           values: [ 3D, Print, Sculpture, Paint, Digital, Extra ]
+      - name: Date
+        type: text
       - name: description
         label: "Description"
         type: rich-text
         options:
           format: html
-      - name: Date
-        type: date
-        options:
-          format: dd-MM-yyyy
