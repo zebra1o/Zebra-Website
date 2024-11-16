@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import * as SPLAT from 'gsplat';
-	import type { ViewerProps } from '$lib/types/viewer.types';
+	import type { ViewerProps } from '$lib/types';
 
 	const props: ViewerProps = $props();
 	const splat_state = $state({
@@ -18,32 +18,38 @@
 
 	let container: HTMLDivElement | null = $state(null);
 	let frameId: number | null = $state(null);
+	let lastFrameTime = 0;
+	const targetFPS = 30;
+	const frameInterval = 1000 / targetFPS;
 
 	const handleResize = () => {
 		if (!container || !splat_state.renderer) return;
-		splat_state.renderer.setSize(container.clientWidth, container.clientHeight);
+		const scale = window.devicePixelRatio > 1 ? 0.75 : 1;
+		const width = Math.floor(container.clientWidth * scale);
+		const height = Math.floor(container.clientHeight * scale);
+		splat_state.renderer.setSize(width, height);
 	};
 
 	const initGsplat = async () => {
 		if (!container || !props.modelUrl) return;
 
 		try {
-			// Initialize scene and renderer with correct options
+			// Initialize scene and renderer with default settings
 			splat_state.scene = new SPLAT.Scene();
 			splat_state.camera = new SPLAT.Camera();
-
-			// Create canvas with transparent background
-			const canvas = document.createElement('canvas');
-			canvas.style.background = 'transparent';
-
 			splat_state.renderer = new SPLAT.WebGLRenderer();
-			splat_state.renderer.canvas.style.background = 'transparent';
 
 			// Set initial size
-			handleResize();
+			const scale = window.devicePixelRatio > 1 ? 0.75 : 1;
+			const width = Math.floor(container.clientWidth * scale);
+			const height = Math.floor(container.clientHeight * scale);
+			splat_state.renderer.setSize(width, height);
+
+			// Make background transparent
+			splat_state.renderer.canvas.style.background = 'transparent';
 			container.appendChild(splat_state.renderer.canvas);
 
-			// Configure controls with default settings
+			// Configure controls
 			splat_state.controls = new SPLAT.OrbitControls(
 				splat_state.camera,
 				splat_state.renderer.canvas
@@ -56,7 +62,6 @@
 				}
 			});
 
-			// Start rendering only after data is loaded
 			if (splat_state.isSceneReady) {
 				splat_state.isRendering = true;
 				startRenderLoop();
@@ -68,7 +73,8 @@
 	};
 
 	const startRenderLoop = () => {
-		const frame = () => {
+		let previousFrame = 0;
+		const frame = (currentTime: number) => {
 			if (
 				splat_state.controls &&
 				splat_state.renderer &&
@@ -78,8 +84,26 @@
 				splat_state.isRendering &&
 				splat_state.isVisible
 			) {
-				splat_state.controls.update();
-				splat_state.renderer.render(splat_state.scene, splat_state.camera);
+				// FPS limiting
+				const deltaTime = currentTime - previousFrame;
+				if (deltaTime < frameInterval) {
+					frameId = requestAnimationFrame(frame);
+					return;
+				}
+
+				previousFrame = currentTime - (deltaTime % frameInterval);
+
+				try {
+					splat_state.controls.update();
+					splat_state.renderer.render(splat_state.scene, splat_state.camera);
+				} catch (error) {
+					console.error('Render error:', error);
+					// Attempt recovery
+					if (splat_state.renderer) {
+						splat_state.renderer.resetState();
+					}
+				}
+
 				frameId = requestAnimationFrame(frame);
 			}
 		};
@@ -96,16 +120,17 @@
 		}
 
 		if (splat_state.renderer) {
-			const gl = splat_state.renderer.canvas.getContext('webgl2');
-			if (gl) {
-				gl.getExtension('WEBGL_lose_context')?.loseContext();
+			try {
+				const gl = splat_state.renderer.canvas.getContext('webgl2');
+				if (gl) {
+					gl.getExtension('WEBGL_lose_context')?.loseContext();
+				}
+			} catch (error) {
+				console.error('Error during cleanup:', error);
 			}
+
 			splat_state.renderer.canvas.remove();
 			splat_state.renderer = null;
-		}
-
-		if (splat_state.controls) {
-			splat_state.controls = null;
 		}
 
 		if (splat_state.scene) {
@@ -113,6 +138,7 @@
 			splat_state.scene = null;
 		}
 
+		splat_state.controls = null;
 		splat_state.camera = null;
 	}
 
@@ -130,9 +156,17 @@
 					(entries) => {
 						entries.forEach((entry) => {
 							splat_state.isVisible = entry.isIntersecting;
+							if (!entry.isIntersecting) {
+								splat_state.isRendering = false;
+							} else {
+								splat_state.isRendering = true;
+								if (!frameId) {
+									startRenderLoop();
+								}
+							}
 						});
 					},
-					{ threshold: 0.1 }
+					{ threshold: 0.01 }
 				);
 
 				observer.observe(container);
