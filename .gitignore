@@ -6,6 +6,7 @@ node_modules
 /.svelte-kit
 /.wrangler
 /build
+stats.html
 
 # OS
 .DS_Store

@@ -1,12 +1,14 @@
 <script lang="ts">
 	import Work from '$lib/components/Work.svelte';
-	import { works } from '$lib/components/works.svelte';
 	import { isLoading } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { cacheImages } from '$lib/utils/imageCache';
 	import ImageModal from '$lib/components/viewers/ImageModal.svelte';
 
-	let loadedImages = 0;
+	let { data } = $props();
+	let works = data.works;
+
+	let loadedImages = $state(0);
 	const totalImages = works.length;
 
 	function handleImageLoaded() {
