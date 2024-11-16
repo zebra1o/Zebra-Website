@@ -13,8 +13,8 @@
 	let wasDragging = $state(false);
 
 	function getRandomPosition() {
-		const cardWidth = 300;
-		const cardHeight = 300;
+		const cardWidth = window.innerWidth <= 640 ? 200 : 300;
+		const cardHeight = window.innerWidth <= 640 ? 200 : 300;
 		const padding = 20;
 
 		return {
@@ -29,8 +29,8 @@
 		const x = gsap.getProperty(cardElement, 'x') as number;
 		const y = gsap.getProperty(cardElement, 'y') as number;
 
-		const cardWidth = 300;
-		const cardHeight = 300;
+		const cardWidth = window.innerWidth <= 640 ? 200 : 300;
+		const cardHeight = window.innerWidth <= 640 ? 200 : 300;
 		const padding = 20;
 
 		const maxX = window.innerWidth - cardWidth - padding;
@@ -148,7 +148,7 @@
 	style="touch-action: none;"
 	onclick={handleClick}
 >
-	<div class="relative h-auto w-[300px] overflow-hidden">
+	<div class="relative h-auto w-[150px] overflow-hidden sm:w-[300px]">
 		<img src={work.image} alt={work.title} class="h-full w-full object-contain" />
 	</div>
 </button>
