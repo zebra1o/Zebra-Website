@@ -66,15 +66,19 @@
 
 		controls = new OrbitControls(camera, renderer.domElement);
 		controls.enableDamping = true;
-		controls.dampingFactor = 0.07;
-		controls.rotateSpeed = 0.7;
-		controls.panSpeed = 0.7;
-		controls.zoomSpeed = 0.7;
-		controls.maxPolarAngle = Math.PI / 1.5;
-		controls.minPolarAngle = Math.PI / 3;
+		controls.dampingFactor = 0.05;
+		controls.rotateSpeed = 1.0;
+		controls.panSpeed = 1.0;
+		controls.zoomSpeed = 1.2;
+		controls.maxPolarAngle = Math.PI;
+		controls.minPolarAngle = 0;
 		controls.enableZoom = true;
-		controls.maxDistance = 10;
-		controls.minDistance = 2;
+		controls.maxDistance = 20;
+		controls.minDistance = 1;
+		controls.enablePan = true;
+		controls.screenSpacePanning = true;
+		controls.autoRotate = false;
+		controls.autoRotateSpeed = 2.0;
 		controls.target.set(0, 0, 0);
 
 		state.renderer = renderer;
