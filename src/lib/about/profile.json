@@ -1,0 +1,16 @@
+{
+  "bio": "<p>Tesing Bio</p>",
+  "email": "email@email.com",
+  "location": "Bari",
+  "avatar": "/media/images/aaaaaaaaaaaaaaaaaaaaaaaaaabarico.png",
+  "social": [
+    {
+      "platform": "Instagram",
+      "url": "https://instagram.com/zebra"
+    },
+    {
+      "platform": "Behance",
+      "url": "https://www.behance.net/ze_bra"
+    }
+  ]
+}
