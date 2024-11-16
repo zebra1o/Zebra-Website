@@ -1,6 +1,11 @@
 media:
   input: static/media
   output: /media
+  optimize:
+    enabled: true # Enable image optimization
+    maxWidth: 1920 # Maximum image width
+    maxHeight: 1080 # Maximum image height
+    quality: 0.80 # WebP quality (0-1)
 
 content:
   - name: works
@@ -24,11 +29,14 @@ content:
         label: 'Image'
         type: image
         required: true
+        options:
+          input: 'static/media/images'
+          output: '/media/images'
       - name: tags
         label: Tags
         type: select
         list:
-          min: 1
+          min: 0
           max: 4
         options:
           values: [3D, Print, Sculpture, Paint, Digital, Extra, Illustration, Mixed Media]
@@ -42,11 +50,13 @@ content:
         options:
           values: [glb, gltf, splat, ply]
       - name: model_file
-        label: 'Model Filename'
-        type: string
-        pattern:
-          regex: '^.*\.(glb|splat|gltf|ply)$'
-          message: 'Must be a .glb, .gltf, .splat or .ply file in the models directory'
+        label: 'Model'
+        type: file
+        options:
+          input: 'static/media/models'
+          output: '/media/models'
+          multiple: false
+          extensions: ['glb', 'gltf', 'splat', 'ply']
       - name: date_text
         label: Date
         type: string
@@ -68,7 +78,6 @@ content:
         type: rich-text
         options:
           format: html
-        required: true
       - name: email
         label: 'Email'
         type: string
@@ -91,14 +100,12 @@ content:
             type: select
             options:
               values: [Instagram, Twitter, LinkedIn, GitHub, Behance, ArtStation]
-            required: true
           - name: url
             label: 'URL'
             type: string
             pattern:
               regex: '^https?:\/\/.*$'
               message: 'Must be a valid URL starting with http:// or https://'
-            required: true
       - name: cv
         label: 'CV/Resume'
         type: object
@@ -111,11 +118,9 @@ content:
               - name: institution
                 label: 'Institution'
                 type: string
-                required: true
               - name: degree
                 label: 'Degree'
                 type: string
-                required: true
               - name: year
                 label: 'Year'
                 type: string
@@ -127,15 +132,12 @@ content:
               - name: title
                 label: 'Exhibition Title'
                 type: string
-                required: true
               - name: venue
                 label: 'Venue'
                 type: string
-                required: true
               - name: year
                 label: 'Year'
                 type: string
-                required: true
               - name: description
                 label: 'Description'
                 type: text
