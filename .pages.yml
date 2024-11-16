@@ -55,3 +55,87 @@ content:
         type: rich-text
         options:
           format: html
+
+  - name: profile
+    label: 'Profile'
+    type: file
+    path: 'src/lib/about/profile.json'
+    format: json
+    icon: user
+    fields:
+      - name: bio
+        label: 'Biography'
+        type: rich-text
+        options:
+          format: html
+        required: true
+      - name: email
+        label: 'Email'
+        type: string
+        pattern:
+          regex: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+          message: 'Please enter a valid email address'
+      - name: location
+        label: 'Location'
+        type: string
+      - name: avatar
+        label: 'Profile Picture'
+        type: image
+      - name: social
+        label: 'Social Links'
+        type: object
+        list: true
+        fields:
+          - name: platform
+            label: 'Platform'
+            type: select
+            options:
+              values: [Instagram, Twitter, LinkedIn, GitHub, Behance, ArtStation]
+            required: true
+          - name: url
+            label: 'URL'
+            type: string
+            pattern:
+              regex: '^https?:\/\/.*$'
+              message: 'Must be a valid URL starting with http:// or https://'
+            required: true
+      - name: cv
+        label: 'CV/Resume'
+        type: object
+        fields:
+          - name: education
+            label: 'Education'
+            type: object
+            list: true
+            fields:
+              - name: institution
+                label: 'Institution'
+                type: string
+                required: true
+              - name: degree
+                label: 'Degree'
+                type: string
+                required: true
+              - name: year
+                label: 'Year'
+                type: string
+          - name: exhibitions
+            label: 'Exhibitions'
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: 'Exhibition Title'
+                type: string
+                required: true
+              - name: venue
+                label: 'Venue'
+                type: string
+                required: true
+              - name: year
+                label: 'Year'
+                type: string
+                required: true
+              - name: description
+                label: 'Description'
+                type: text
