@@ -12,4 +12,6 @@
 	<meta property="og:image" content="/icons/android-icon-192x192.png" />
 </svelte:head>
 
-{@render children()}
+<div class="h-screen w-screen bg-black text-white">
+	{@render children()}
+</div>

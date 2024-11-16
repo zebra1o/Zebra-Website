@@ -39,3 +39,43 @@ export type ViewerState = {
 	loading: boolean;
 	error: string | null;
 };
+
+export type SocialPlatform =
+	| 'Instagram'
+	| 'Twitter'
+	| 'LinkedIn'
+	| 'GitHub'
+	| 'Behance'
+	| 'ArtStation';
+
+export interface SocialLink {
+	platform: SocialPlatform;
+	url: string;
+}
+
+export interface Education {
+	institution: string;
+	degree: string;
+	year: string;
+}
+
+export interface Exhibition {
+	title: string;
+	venue: string;
+	year: string;
+	description?: string;
+}
+
+export interface CV {
+	education: Education[];
+	exhibitions: Exhibition[];
+}
+
+export interface Profile {
+	bio: string;
+	email?: string;
+	location?: string;
+	avatar?: string;
+	social: SocialLink[];
+	cv?: CV;
+}
