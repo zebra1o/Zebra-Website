@@ -7,94 +7,92 @@
 
 	$effect(() => {
 		if ($openModal && dialog) {
-			handleDialogOpen();
-		} else {
-			handleDialogClose();
-			showInfo = false;
+			dialog.showModal();
 		}
 	});
 
-	function handleDialogOpen() {
-		if (dialog) {
-			dialog.showModal();
-		}
-	}
-
 	function handleDialogClose() {
-		if (dialog) {
-			dialog.close();
-			showInfo = false;
-			$openModal = false;
-			$selectedWork = null;
-		}
+		showInfo = false;
+		$openModal = false;
+		$selectedWork = null;
 	}
 </script>
 
-<dialog bind:this={dialog} class="fixed inset-0 m-0 h-screen w-screen bg-transparent p-0">
-	<div class="relative h-full w-full">
-		<!-- Controls -->
-		<div class="fixed right-8 top-8 z-[60] flex gap-2">
-			<button
-				type="button"
-				aria-label="Toggle info"
-				onclick={() => (showInfo = !showInfo)}
-				class="rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<dialog
+	bind:this={dialog}
+	class="m-auto bg-transparent p-0"
+	onclose={handleDialogClose}
+	onclick={(e) => {
+		if (e.target === dialog) dialog?.close();
+	}}
+>
+	<!-- Controls - moved outside the relative container -->
+	<div class="fixed right-8 top-8 z-[60] flex gap-2">
+		<button
+			type="button"
+			aria-label="Toggle info"
+			onclick={() => (showInfo = !showInfo)}
+			class="rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="20"
-					height="20"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<circle cx="12" cy="12" r="10" />
-					<path d="M12 16v-4" />
-					<path d="M12 8h.01" />
-				</svg>
-			</button>
+				<circle cx="12" cy="12" r="10" />
+				<path d="M12 16v-4" />
+				<path d="M12 8h.01" />
+			</svg>
+		</button>
 
-			<button
-				type="button"
-				aria-label="Close dialog"
-				onclick={handleDialogClose}
-				class="rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+		<button
+			type="button"
+			aria-label="Close dialog"
+			onclick={() => dialog?.close()}
+			class="rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="20"
-					height="20"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M18 6 6 18" />
-					<path d="m6 6 12 12" />
-				</svg>
-			</button>
-		</div>
+				<path d="M18 6 6 18" />
+				<path d="m6 6 12 12" />
+			</svg>
+		</button>
+	</div>
 
+	<div class="relative">
 		{#if $selectedWork}
 			<!-- Content Container -->
-			<div class="flex h-full w-full items-center justify-center p-4">
+			<div class="flex items-center justify-center">
 				{#if $selectedWork.has_model && $selectedWork.model_format && $selectedWork.model_file}
-					<div class="h-[85vh] w-full max-w-[85vw]">
+					<div class="h-[85vh] w-[85vw]">
 						<ModelViewer
 							format={$selectedWork.model_format}
 							file={`/media/models/${$selectedWork.model_file}`}
+							className="h-full w-full"
 						/>
 					</div>
 				{:else}
 					<img
 						src={$selectedWork.image}
 						alt={$selectedWork.title}
-						class="max-h-[85vh] rounded object-contain"
+						class="max-h-[85vh] max-w-[85vw] rounded object-contain"
 					/>
 				{/if}
 			</div>
@@ -134,14 +132,10 @@
 </dialog>
 
 <style>
-	/* Base dialog styles */
 	dialog {
-		background-color: transparent;
 		border: none;
-		padding: 0;
 		max-width: 100vw;
 		max-height: 100vh;
-		margin: 0;
 		color-scheme: normal;
 	}
 

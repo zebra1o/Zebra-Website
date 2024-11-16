@@ -4,7 +4,7 @@
 	import { isLoading } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { cacheImages } from '$lib/utils/imageCache';
-	import ImageModal from '$lib/components/ImageModal.svelte';
+	import ImageModal from '$lib/components/viewers/ImageModal.svelte';
 
 	let loadedImages = 0;
 	const totalImages = works.length;
@@ -44,10 +44,7 @@
 	</div>
 {/if}
 
-
-<ImageModal
-/>
-
+<ImageModal />
 
 <div class="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
 	<div class="overflow-container relative h-full w-full">
