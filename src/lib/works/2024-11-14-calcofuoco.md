@@ -1,4 +1,4 @@
 ---
 title: Calcofuoco
-image: /media/calcofuoco_compressed.jpg
+image: /media/images/calcofuoco_compressed.jpg
 ---

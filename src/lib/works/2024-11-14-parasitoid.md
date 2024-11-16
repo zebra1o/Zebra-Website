@@ -1,4 +1,4 @@
 ---
 title: Parasitoid
-image: /media/parasitoid_compressed.jpg
+image: /media/images/parasitoid_compressed.jpg
 ---

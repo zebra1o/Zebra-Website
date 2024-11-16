@@ -1,4 +1,4 @@
 ---
 title: Camera Mask
-image: /media/camemask_compressed.png
+image: /media/images/camemask_compressed.png
 ---

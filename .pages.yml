@@ -1,27 +1,27 @@
 media:
-  input: static/media  # Shared media folder used by both Pages CMS and SvelteKit
+  input: static/media
   output: /media
 
 content:
   - name: works
-    label: "Works"
+    label: 'Works'
     type: collection
     view:
-      fields: [ title, image, tags, date ]
+      fields: [title, image, tags, date, has_model]
       primary: title
-      sort: [ date, title, tags ]
+      sort: [date, title, tags, has_model]
       default:
         search: ''
         sort: date
         order: desc
-    path: "src/lib/works"
+    path: 'src/lib/works'
     fields:
       - name: title
-        label: "Title"
+        label: 'Title'
         type: string
         required: true
       - name: image
-        label: "Image"
+        label: 'Image'
         type: image
         required: true
       - name: tags
@@ -31,11 +31,26 @@ content:
           min: 1
           max: 4
         options:
-          values: [ 3D, Print, Sculpture, Paint, Digital, Extra, Illustration, Mixed Media ]
+          values: [3D, Print, Sculpture, Paint, Digital, Extra, Illustration, Mixed Media]
+      - name: has_model
+        label: '3D Model'
+        type: boolean
+        default: false
+      - name: model_format
+        label: 'Model Format'
+        type: select
+        options:
+          values: [glb, gltf, splat, ply]
+      - name: model_file
+        label: 'Model Filename'
+        type: string
+        pattern:
+          regex: '^.*\.(glb|splat|gltf|ply)$'
+          message: 'Must be a .glb, .gltf, .splat or .ply file in the models directory'
       - name: Date
         type: string
       - name: description
-        label: "Description"
+        label: 'Description'
         type: rich-text
         options:
           format: html

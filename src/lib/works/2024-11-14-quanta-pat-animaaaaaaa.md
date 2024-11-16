@@ -1,4 +1,4 @@
 ---
 title: Quanta Pat animaaAAAAA
-image: /media/QUANTA_PAT_animaAAAAAAAAAAAAAAAAAAAAAAAAAA_compressed.png
+image: /media/images/QUANTA_PAT_animaAAAAAAAAAAAAAAAAAAAAAAAAAA_compressed.png
 ---

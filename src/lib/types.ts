@@ -8,10 +8,15 @@ export type WorkTag =
 	| 'Illustration'
 	| 'Mixed Media';
 
+export type ModelFormat = 'glb' | 'gltf' | 'splat' | 'ply';
+
 export interface WorkMetadata {
 	title: string;
 	image: string;
 	tags: WorkTag[];
-	description?: string; // Optional since not marked as required in config
-	Date: string; // Free-form string field, matching the case in the config
+	description?: string;
+	Date: string;
+	has_model: boolean;
+	model_format?: ModelFormat;
+	model_file?: string;
 }

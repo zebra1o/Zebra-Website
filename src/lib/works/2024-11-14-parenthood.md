@@ -1,4 +1,4 @@
 ---
 title: Parenthood
-image: /media/parenthood_compressed.jpg
+image: /media/images/parenthood_compressed.jpg
 ---

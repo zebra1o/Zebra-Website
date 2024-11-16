@@ -12,7 +12,8 @@
 		camera: null as SPLAT.Camera | null,
 		controls: null as SPLAT.OrbitControls | null,
 		isSceneReady: false,
-		isRendering: false
+		isRendering: false,
+		isVisible: true
 	});
 
 	let container: HTMLDivElement | null = $state(null);
@@ -27,20 +28,28 @@
 		if (!container || !props.modelUrl) return;
 
 		try {
-			// Initialize scene and renderer
+			// Initialize scene and renderer with correct options
 			splat_state.scene = new SPLAT.Scene();
 			splat_state.camera = new SPLAT.Camera();
+
+			// Create canvas with transparent background
+			const canvas = document.createElement('canvas');
+			canvas.style.background = 'transparent';
+
 			splat_state.renderer = new SPLAT.WebGLRenderer();
-			splat_state.controls = new SPLAT.OrbitControls(
-				splat_state.camera,
-				splat_state.renderer.canvas
-			);
+			splat_state.renderer.canvas.style.background = 'transparent';
 
 			// Set initial size
 			handleResize();
 			container.appendChild(splat_state.renderer.canvas);
 
-			// Load the splat data and wait for it to complete
+			// Configure controls with default settings
+			splat_state.controls = new SPLAT.OrbitControls(
+				splat_state.camera,
+				splat_state.renderer.canvas
+			);
+
+			// Load the splat data
 			await SPLAT.Loader.LoadAsync(props.modelUrl, splat_state.scene, (progress) => {
 				if (progress === 1) {
 					splat_state.isSceneReady = true;
@@ -54,7 +63,7 @@
 			}
 		} catch (error) {
 			console.error('Failed to initialize gsplat:', error);
-			throw new Error('Failed to load splat data');
+			splat_state.error = 'Failed to load splat data';
 		}
 	};
 
@@ -66,7 +75,8 @@
 				splat_state.scene &&
 				splat_state.camera &&
 				splat_state.isSceneReady &&
-				splat_state.isRendering
+				splat_state.isRendering &&
+				splat_state.isVisible
 			) {
 				splat_state.controls.update();
 				splat_state.renderer.render(splat_state.scene, splat_state.camera);
@@ -86,8 +96,6 @@
 		}
 
 		if (splat_state.renderer) {
-			splat_state.renderer.dispose();
-			// Force WebGL context loss
 			const gl = splat_state.renderer.canvas.getContext('webgl2');
 			if (gl) {
 				gl.getExtension('WEBGL_lose_context')?.loseContext();
@@ -97,7 +105,6 @@
 		}
 
 		if (splat_state.controls) {
-			splat_state.controls.dispose();
 			splat_state.controls = null;
 		}
 
@@ -109,22 +116,37 @@
 		splat_state.camera = null;
 	}
 
-	// Handle scene setup
 	$effect(() => {
 		if (!container) return;
 
 		untrack(async () => {
 			if (!container) return;
 			splat_state.loading = true;
-			splat_state.error = null;
 
 			try {
 				await initGsplat();
 
-				const resizeObserver = new ResizeObserver(handleResize);
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							splat_state.isVisible = entry.isIntersecting;
+						});
+					},
+					{ threshold: 0.1 }
+				);
+
+				observer.observe(container);
+
+				const resizeObserver = new ResizeObserver(
+					debounce(() => {
+						handleResize();
+					}, 250)
+				);
+
 				resizeObserver.observe(container);
 
 				return () => {
+					observer.disconnect();
 					resizeObserver.disconnect();
 					cleanupSplat();
 				};
@@ -135,17 +157,31 @@
 			}
 		});
 	});
+
+	function debounce(fn: () => void, wait: number) {
+		let timeout: ReturnType<typeof setTimeout>;
+		return () => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => fn(), wait);
+		};
+	}
 </script>
 
 <div class="relative h-full w-full" bind:this={container}>
 	{#if splat_state.loading}
-		<div class="absolute inset-0 z-10 flex items-center justify-center bg-gray-100">
-			<div class="text-gray-600">Loading...</div>
+		<div class="absolute inset-0 z-10 flex items-center justify-center bg-transparent">
+			<div class="text-white">Loading...</div>
 		</div>
 	{/if}
 	{#if splat_state.error}
-		<div class="absolute inset-0 z-10 flex items-center justify-center bg-red-50">
-			<div class="text-red-600">{splat_state.error}</div>
+		<div class="absolute inset-0 z-10 flex items-center justify-center bg-transparent">
+			<div class="text-red-500">{splat_state.error}</div>
 		</div>
 	{/if}
 </div>
+
+<style>
+	:global(canvas) {
+		background: transparent !important;
+	}
+</style>

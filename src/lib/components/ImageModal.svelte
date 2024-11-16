@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { openModal, selectedWork } from '$lib/stores';
+	import ModelViewer from './ModelViewer.svelte';
 
 	let showInfo = $state(false);
 	let dialog: HTMLDialogElement | null = $state(null);
@@ -28,10 +28,6 @@
 			$selectedWork = null;
 		}
 	}
-
-	onMount(() => {
-		console.log('ImageModal mounted');
-	});
 </script>
 
 <dialog bind:this={dialog} class="fixed inset-0 m-0 h-screen w-screen bg-transparent p-0">
@@ -85,13 +81,22 @@
 		</div>
 
 		{#if $selectedWork}
-			<!-- Image Container -->
+			<!-- Content Container -->
 			<div class="flex h-full w-full items-center justify-center p-4">
-				<img
-					src={$selectedWork.image}
-					alt={$selectedWork.title}
-					class="max-h-[85vh] rounded object-contain"
-				/>
+				{#if $selectedWork.has_model && $selectedWork.model_format && $selectedWork.model_file}
+					<div class="h-[85vh] w-full max-w-[85vw]">
+						<ModelViewer
+							format={$selectedWork.model_format}
+							file={`/media/models/${$selectedWork.model_file}`}
+						/>
+					</div>
+				{:else}
+					<img
+						src={$selectedWork.image}
+						alt={$selectedWork.title}
+						class="max-h-[85vh] rounded object-contain"
+					/>
+				{/if}
 			</div>
 
 			<!-- Info Panel -->
@@ -117,7 +122,7 @@
 						<p class="mt-4 text-sm text-gray-300">{$selectedWork.Date}</p>
 
 						{#if $selectedWork.description}
-							<div class="mt-4 text-sm description-content">
+							<div class="description-content mt-4 text-sm">
 								{@html $selectedWork.description}
 							</div>
 						{/if}
@@ -225,11 +230,11 @@
 		margin: 1rem auto;
 	}
 
-	:global([style*="text-align: center"]) {
+	:global([style*='text-align: center']) {
 		text-align: center;
 	}
 
-	:global([style*="text-align: justify"]) {
+	:global([style*='text-align: justify']) {
 		text-align: justify;
 	}
 </style>
