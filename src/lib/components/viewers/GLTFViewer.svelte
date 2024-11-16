@@ -36,10 +36,11 @@
 		const renderer = new THREE.WebGLRenderer({
 			antialias: window.devicePixelRatio < 2, // Enable only for non-high-DPI displays
 			alpha: true,
-			powerPreference: 'default',
-			precision: 'highp',
+			powerPreference: 'low-power',
+			precision: 'mediump',
 			stencil: false,
-			depth: true
+			depth: true,
+			failIfMajorPerformanceCaveat: true
 		});
 
 		renderer.setSize(container.clientWidth, container.clientHeight);
