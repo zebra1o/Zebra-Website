@@ -9,12 +9,10 @@
 
 	let cardElement: HTMLButtonElement | null = $state(null);
 	let draggableInstance: Draggable[] | null = $state(null);
-	let isDragging = $state(false);
-	let wasDragging = $state(false);
 
 	function getRandomPosition() {
-		const cardWidth = window.innerWidth <= 640 ? 200 : 300;
-		const cardHeight = window.innerWidth <= 640 ? 200 : 300;
+		const cardWidth = window.innerWidth <= 640 ? 150 : 300;
+		const cardHeight = window.innerWidth <= 640 ? 150 : 300;
 		const padding = 20;
 
 		return {
@@ -29,8 +27,8 @@
 		const x = gsap.getProperty(cardElement, 'x') as number;
 		const y = gsap.getProperty(cardElement, 'y') as number;
 
-		const cardWidth = window.innerWidth <= 640 ? 200 : 300;
-		const cardHeight = window.innerWidth <= 640 ? 200 : 300;
+		const cardWidth = window.innerWidth <= 640 ? 150 : 300;
+		const cardHeight = window.innerWidth <= 640 ? 150 : 300;
 		const padding = 20;
 
 		const maxX = window.innerWidth - cardWidth - padding;
@@ -43,13 +41,6 @@
 
 		if (draggableInstance?.[0]) {
 			draggableInstance[0].applyBounds('.overflow-container');
-		}
-	}
-
-	function handleClick() {
-		if (!wasDragging) {
-			$selectedWork = work;
-			$openModal = true;
 		}
 	}
 
@@ -107,23 +98,24 @@
 			});
 		});
 
+		// Create draggable instance with improved click handling
 		draggableInstance = Draggable.create(cardElement, {
 			type: 'x,y',
 			bounds: '.overflow-container',
-			inertia: true,
+			cursor: 'grab',
+			activeCursor: 'grabbing',
+			minimumMovement: 2,
+			onClick: function () {
+				$selectedWork = work;
+				$openModal = true;
+			},
 			onDragStart: function () {
-				isDragging = true;
-				wasDragging = true;
 				gsap.to(cardElement, {
 					scale: 1.05,
 					duration: 0.2
 				});
 			},
 			onDragEnd: function () {
-				isDragging = false;
-				setTimeout(() => {
-					wasDragging = false;
-				}, 100);
 				gsap.to(cardElement, {
 					scale: 1,
 					duration: 0.2
@@ -144,9 +136,8 @@
 
 <button
 	bind:this={cardElement}
-	class="absolute h-auto cursor-grab opacity-0 active:cursor-grabbing"
+	class="absolute h-auto touch-none opacity-0"
 	style="touch-action: none;"
-	onclick={handleClick}
 >
 	<div class="relative h-auto w-[150px] overflow-hidden sm:w-[300px]">
 		<img src={work.image} alt={work.title} class="h-full w-full object-contain" />
