@@ -15,7 +15,7 @@ export interface WorkMetadata {
 	image: string;
 	tags: WorkTag[];
 	description?: string;
-	Date: string;
+	date_text: string;
 	has_model: boolean;
 	model_format?: ModelFormat;
 	model_file?: string;
