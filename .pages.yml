@@ -47,7 +47,8 @@ content:
         pattern:
           regex: '^.*\.(glb|splat|gltf|ply)$'
           message: 'Must be a .glb, .gltf, .splat or .ply file in the models directory'
-      - name: Date
+      - name: date_text
+        label: Date
         type: string
       - name: description
         label: 'Description'
