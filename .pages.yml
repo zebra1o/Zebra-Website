@@ -20,6 +20,15 @@ content:
         label: 'Title'
         type: string
         required: true
+        layout:
+          width: 1/2
+          row: 1
+      - name: date_text
+        label: Date
+        type: string
+        layout:
+          width: 1/2
+          row: 1
       - name: image
         label: 'Image'
         type: image
@@ -32,9 +41,6 @@ content:
           max: 4
         options:
           values: [3D, Print, Sculpture, Paint, Digital, Extra, Illustration, Mixed Media]
-      - name: date_text
-        label: Date
-        type: string
       - name: description
         label: 'Description'
         type: rich-text
