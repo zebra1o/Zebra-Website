@@ -65,7 +65,9 @@ content:
     fields:
       - name: bio
         label: 'Biography'
-        type: text
+        type: rich-text
+        options:
+          format: html
       - name: email
         label: 'Email'
         type: string
