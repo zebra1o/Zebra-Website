@@ -32,21 +32,6 @@ content:
           max: 4
         options:
           values: [3D, Print, Sculpture, Paint, Digital, Extra, Illustration, Mixed Media]
-      - name: has_model
-        label: '3D Model'
-        type: boolean
-        default: false
-      - name: model_format
-        label: 'Model Format'
-        type: select
-        options:
-          values: [glb, gltf, splat, ply]
-      - name: model_file
-        label: 'Model Filename'
-        type: string
-        pattern:
-          regex: '^.*\.(glb|splat|gltf|ply)$'
-          message: 'Must be a .glb, .gltf, .splat or .ply file in the models directory'
       - name: date_text
         label: Date
         type: string
