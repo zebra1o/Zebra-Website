@@ -22,11 +22,13 @@ content:
         required: true
         layout:
           width: 1/2
+          column: 0
       - name: date_text
         label: Date
         type: string
         layout:
           width: 1/2
+          column: 3
       - name: image
         label: 'Image'
         type: image
