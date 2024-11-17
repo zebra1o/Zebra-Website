@@ -52,7 +52,9 @@ content:
         type: string
       - name: description
         label: 'Description'
-        type: text
+        type: rich-text
+        options:
+          format: html
 
   - name: profile
     label: 'Profile'
