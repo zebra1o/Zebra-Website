@@ -14,7 +14,7 @@ content:
         search: ''
         sort: date
         order: desc
-    path: 'src/lib/works'
+    path: 'src/lib/_content'
     fields:
       - name: title
         label: 'Title'
