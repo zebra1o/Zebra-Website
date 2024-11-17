@@ -87,7 +87,7 @@ content:
             label: 'Platform'
             type: select
             options:
-              values: [Instagram, Twitter, LinkedIn, GitHub, Behance, ArtStation]
+              values: [Instagram, Twitter, LinkedIn, GitHub, Behance]
           - name: url
             label: 'URL'
             type: string
