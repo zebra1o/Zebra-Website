@@ -7,12 +7,12 @@ content:
     label: 'Works'
     type: collection
     view:
-      fields: [title, image, tags, has_model, date]
+      fields: [title, image, year]
       primary: title
-      sort: [date, title, tags, has_model]
+      sort: [year, title]
       default:
         search: ''
-        sort: date
+        sort: year
         order: desc
     path: 'src/lib/works'
     fields:
