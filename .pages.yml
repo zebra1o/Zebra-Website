@@ -23,6 +23,8 @@ content:
       - name: image
         label: 'Image'
         type: image
+        options:
+          path: /images
         required: true
       - name: tags
         label: Tags
@@ -45,10 +47,13 @@ content:
         label: 'Model File'
         type: image
         options:
+          path: /models
           extensions: [glb, gltf, splat, ply]
-      - name: date_text
-        label: Date
-        type: string
+      - name: year
+        label: Year
+        type: date
+        options:
+          format: yyyy
       - name: description
         label: 'Description'
         type: rich-text
