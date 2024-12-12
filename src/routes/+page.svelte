@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Work from '$lib/components/Work.svelte';
 	import Profile from '$lib/components/Profile.svelte';
-	import { isLoading, openProfileModal } from '$lib/stores';
+	import { isLoading, openModal, openProfileModal, selectedWork } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { cacheImages } from '$lib/utils/imageCache';
 	import ImageModal from '$lib/components/viewers/ImageModal.svelte';
@@ -21,11 +21,22 @@
 			}, 500);
 		}
 	}
+	import { queryParameters } from 'sveltekit-search-params';
+	import slugify from '$lib/utils/slufigy';
+
+	const params = queryParameters({
+		i: true
+	});
 
 	onMount(() => {
 		if (totalImages === 0) {
 			$isLoading = false;
 			return;
+		}
+
+		if (params.art) {
+			$selectedWork = works.find((work) => slugify(work.title) === params.art) ?? null;
+			$openModal = true;
 		}
 
 		// Just cache the images directly, no need for status check first

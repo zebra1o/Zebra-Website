@@ -4,6 +4,10 @@
 	import type { WorkMetadata } from '$lib/types';
 	import { getCachedImage } from '$lib/utils/imageCache';
 	import { selectedWork, openModal } from '$lib/stores';
+	import { queryParameters } from 'sveltekit-search-params';
+	import slugify from '$lib/utils/slufigy';
+
+	const params = queryParameters();
 
 	let { onLoaded, work } = $props<{ onLoaded: () => void; work: WorkMetadata }>();
 
@@ -106,6 +110,7 @@
 			activeCursor: 'grabbing',
 			minimumMovement: 2,
 			onClick: function () {
+				params.art = slugify(work.title);
 				$selectedWork = work;
 				$openModal = true;
 			},

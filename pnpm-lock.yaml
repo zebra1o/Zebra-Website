@@ -66,6 +66,9 @@ importers:
       svelte-check:
         specifier: ^4.1.1
         version: 4.1.1(svelte@5.11.3)(typescript@5.7.2)
+      sveltekit-search-params:
+        specifier: ^4.0.0-next.0
+        version: 4.0.0-next.0(@sveltejs/kit@2.11.0(@sveltejs/vite-plugin-svelte@4.0.3(svelte@5.11.3)(vite@5.4.11(@types/node@22.10.2)))(svelte@5.11.3)(vite@5.4.11(@types/node@22.10.2)))(svelte@5.11.3)
       tailwindcss:
         specifier: ^3.4.16
         version: 3.4.16
@@ -1845,6 +1848,12 @@ packages:
     resolution: {integrity: sha512-yyOB+kc8mP6T6F10wGXcO3nSzGowD6dCOeo9jHEkF01dxQyQKh1KO6yrH3rJzwAdEVX/OSV3MRUwcbWDtHI2ww==}
     engines: {node: '>=18'}
 
+  sveltekit-search-params@4.0.0-next.0:
+    resolution: {integrity: sha512-haFr5seakusriPePAv2F5/lsOa37rr9AOGDa5JOZ9CaB0Vrl8V8PdtqNWfh/kF0jlANdkdqz5gKK66nhhHT8tg==}
+    peerDependencies:
+      '@sveltejs/kit': ^2.0.0
+      svelte: ^5.0.0
+
   tailwindcss@3.4.16:
     resolution: {integrity: sha512-TI4Cyx7gDiZ6r44ewaJmt0o6BrMCT5aK5e0rmJ/G9Xq3w7CX/5VXl/zIPEJZFUK5VEqwByyhqNPycPlvcK4ZNw==}
     engines: {node: '>=14.0.0'}
@@ -3567,6 +3576,11 @@ snapshots:
       locate-character: 3.0.0
       magic-string: 0.30.15
       zimmerframe: 1.1.2
+
+  sveltekit-search-params@4.0.0-next.0(@sveltejs/kit@2.11.0(@sveltejs/vite-plugin-svelte@4.0.3(svelte@5.11.3)(vite@5.4.11(@types/node@22.10.2)))(svelte@5.11.3)(vite@5.4.11(@types/node@22.10.2)))(svelte@5.11.3):
+    dependencies:
+      '@sveltejs/kit': 2.11.0(@sveltejs/vite-plugin-svelte@4.0.3(svelte@5.11.3)(vite@5.4.11(@types/node@22.10.2)))(svelte@5.11.3)(vite@5.4.11(@types/node@22.10.2))
+      svelte: 5.11.3
 
   tailwindcss@3.4.16:
     dependencies:
