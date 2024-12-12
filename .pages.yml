@@ -13,7 +13,7 @@ content:
       default:
         search: ''
         sort: title
-        order: desc
+        order: asc
     path: 'src/lib/works'
     fields:
       - name: title
