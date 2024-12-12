@@ -1,5 +1,3 @@
-export const prerender = true;
-export const ssr = true;
 import { works } from '$lib/components/works.svelte';
 import profileJson from '$lib/about/profile.json';
 import type { Profile } from '$lib/types';
