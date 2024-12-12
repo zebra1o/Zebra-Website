@@ -25,6 +25,8 @@ content:
         type: image
         options:
           path: static/media/images
+          input: static/media/images
+          output: /media/images
         required: true
       - name: tags
         label: Tags
@@ -48,6 +50,8 @@ content:
         type: image
         options:
           path: static/media/models
+          input: static/media/models
+          output: /media/models
           extensions: [glb, gltf, splat, ply]
       - name: year
         label: Year
