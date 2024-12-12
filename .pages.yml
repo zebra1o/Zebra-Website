@@ -7,12 +7,12 @@ content:
     label: 'Works'
     type: collection
     view:
-      fields: [title, image, year]
+      fields: [title, image, date]
       primary: title
-      sort: [year, title]
+      sort: [title, date]
       default:
         search: ''
-        sort: year
+        sort: date
         order: desc
     path: 'src/lib/works'
     fields:
@@ -55,9 +55,7 @@ content:
           extensions: [glb, gltf, splat, ply]
       - name: year
         label: Year
-        type: date
-        options:
-          format: yyyy
+        type: string
       - name: description
         label: 'Description'
         type: rich-text
