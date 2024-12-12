@@ -24,7 +24,7 @@ content:
         label: 'Image'
         type: image
         options:
-          path: /images
+          path: static/media/images
         required: true
       - name: tags
         label: Tags
@@ -47,7 +47,7 @@ content:
         label: 'Model File'
         type: image
         options:
-          path: /models
+          path: static/media/models
           extensions: [glb, gltf, splat, ply]
       - name: year
         label: Year
