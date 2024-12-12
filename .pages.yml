@@ -7,13 +7,13 @@ content:
     label: 'Works'
     type: collection
     view:
-      fields: [title, image, tags, has_model, date]
+      fields: [title, image, has_model]
       primary: title
-      sort: [date, title, tags, has_model]
+      sort: [title, image, has_model]
       default:
         search: ''
-        sort: date
-        order: desc
+        sort: title
+        order: asc
     path: 'src/lib/works'
     fields:
       - name: title
@@ -23,6 +23,10 @@ content:
       - name: image
         label: 'Image'
         type: image
+        options:
+          path: static/media/images
+          input: static/media/images
+          output: /media/images
         required: true
       - name: tags
         label: Tags
@@ -42,13 +46,15 @@ content:
         options:
           values: [glb, gltf, splat, ply]
       - name: model_file
-        label: 'Model Filename'
-        type: string
-        pattern:
-          regex: '^.*\.(glb|splat|gltf|ply)$'
-          message: 'Must be a .glb, .gltf, .splat or .ply file in the models directory'
-      - name: date_text
-        label: Date
+        label: 'Model File'
+        type: image
+        options:
+          path: static/media/models
+          input: static/media/models
+          output: /media/models
+          extensions: [glb, gltf, splat, ply]
+      - name: year
+        label: Year
         type: string
       - name: description
         label: 'Description'

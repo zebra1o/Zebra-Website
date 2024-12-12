@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { openModal, selectedWork } from '$lib/stores';
 	import ModelViewer from './ModelViewer.svelte';
+	import { queryParameters } from 'sveltekit-search-params';
+
+	const params = queryParameters({
+		i: true
+	});
 
 	let showInfo = $state(false);
 	let dialog: HTMLDialogElement | null = $state(null);
@@ -12,6 +17,7 @@
 	});
 
 	function handleDialogClose() {
+		params.art = null;
 		showInfo = false;
 		$openModal = false;
 		$selectedWork = null;
@@ -84,7 +90,7 @@
 					<div class="h-[85vh] w-[85vw]">
 						<ModelViewer
 							format={$selectedWork.model_format}
-							file={`/media/models/${$selectedWork.model_file}`}
+							file={$selectedWork.model_file}
 							className="h-full w-full"
 						/>
 					</div>
