@@ -22,7 +22,7 @@
 		}
 	}
 	import { queryParameters } from 'sveltekit-search-params';
-	import slugify from '$lib/utils/slufigy';
+	import slug from 'slug';
 
 	const params = queryParameters({
 		i: true
@@ -35,7 +35,7 @@
 		}
 
 		if (params.art) {
-			$selectedWork = works.find((work) => slugify(work.title) === params.art) ?? null;
+			$selectedWork = works.find((work) => slug(work.title) === params.art) ?? null;
 			$openModal = true;
 		}
 

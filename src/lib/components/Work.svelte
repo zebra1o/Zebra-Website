@@ -5,7 +5,7 @@
 	import { getCachedImage } from '$lib/utils/imageCache';
 	import { selectedWork, openModal } from '$lib/stores';
 	import { queryParameters } from 'sveltekit-search-params';
-	import slugify from '$lib/utils/slufigy';
+	import slug from 'slug';
 
 	const params = queryParameters();
 
@@ -110,7 +110,7 @@
 			activeCursor: 'grabbing',
 			minimumMovement: 2,
 			onClick: function () {
-				params.art = slugify(work.title);
+				params.art = slug(work.title);
 				$selectedWork = work;
 				$openModal = true;
 			},
