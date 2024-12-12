@@ -42,11 +42,10 @@ content:
         options:
           values: [glb, gltf, splat, ply]
       - name: model_file
-        label: 'Model Filename'
-        type: string
-        pattern:
-          regex: '^.*\.(glb|splat|gltf|ply)$'
-          message: 'Must be a .glb, .gltf, .splat or .ply file in the models directory'
+        label: 'Model File'
+        type: image
+        options:
+          extensions: [glb, gltf, splat, ply]
       - name: date_text
         label: Date
         type: string
