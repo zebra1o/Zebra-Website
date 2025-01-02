@@ -31,6 +31,7 @@ content:
       - name: tags
         label: Tags
         type: select
+        required: false
         list:
           min: 1
           max: 4
@@ -59,11 +60,13 @@ content:
       - name: model_format
         label: 'Model Format'
         type: select
+        required: false
         options:
           values: [glb, gltf, splat, ply]
       - name: model_file
         label: 'Model File'
         type: image
+        required: false
         options:
           path: static/media/models
           input: static/media/models
@@ -72,9 +75,11 @@ content:
       - name: year
         label: Year
         type: string
+        required: false
       - name: description
         label: 'Description'
         type: rich-text
+        required: false
         options:
           format: html
 
