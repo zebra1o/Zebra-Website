@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Profile } from '$lib/types';
-	import { openProfileModal } from '$lib/stores';
+	import { openAboutModal } from '$lib/stores';
 
 	let { data }: { data: Profile } = $props();
 	let activeTab = $state('bio');
@@ -14,13 +14,13 @@
 	}
 
 	$effect(() => {
-		if ($openProfileModal && dialog) {
+		if ($openAboutModal && dialog) {
 			dialog.showModal();
 		}
 	});
 
 	function handleDialogClose() {
-		$openProfileModal = false;
+		$openAboutModal = false;
 	}
 </script>
 

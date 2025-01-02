@@ -4,7 +4,7 @@
 	import { queryParameters } from 'sveltekit-search-params';
 
 	const params = queryParameters({
-		i: true
+		art: true
 	});
 
 	let showInfo = $state(false);

@@ -100,7 +100,7 @@
 					console.error('Render error:', error);
 					// Attempt recovery
 					if (splat_state.renderer) {
-						splat_state.renderer.resetState();
+						splat_state.renderer.render(splat_state.scene, splat_state.camera);
 					}
 				}
 

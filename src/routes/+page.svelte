@@ -1,17 +1,33 @@
 <script lang="ts">
+	import slug from 'slug';
+	import { queryParameters, ssp } from 'sveltekit-search-params';
 	import Work from '$lib/components/Work.svelte';
-	import Profile from '$lib/components/Profile.svelte';
-	import { isLoading, openModal, openProfileModal, selectedWork } from '$lib/stores';
+	import About from '$lib/components/About.svelte';
+	import { isLoading, openModal, selectedWork } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { cacheImages } from '$lib/utils/imageCache';
 	import ImageModal from '$lib/components/viewers/ImageModal.svelte';
 	import type { Profile as ProfileType, WorkMetadata } from '$lib/types';
+	import Nav from '$lib/components/Nav.svelte';
 
-	let { data }: { data: { works: WorkMetadata[]; profile: ProfileType } } = $props();
+	let { data }: { data: { works: WorkMetadata[]; profile: ProfileType; tags: string[] } } =
+		$props();
 	let works = data.works;
-
 	let loadedImages = $state(0);
-	const totalImages = works.length;
+
+	const params = queryParameters({
+		art: true,
+		tags: ssp.array<string>()
+	});
+
+	let filteredWorks = $derived.by(() => {
+		if (!params.tags || params.tags.length === 0) return works;
+		return works.filter((work) => {
+			return params.tags?.some((tag) => work.tags?.find((t) => slug(t) === tag));
+		});
+	});
+
+	const totalImages = $derived(filteredWorks.length);
 
 	function handleImageLoaded() {
 		loadedImages++;
@@ -21,12 +37,6 @@
 			}, 500);
 		}
 	}
-	import { queryParameters } from 'sveltekit-search-params';
-	import slug from 'slug';
-
-	const params = queryParameters({
-		i: true
-	});
 
 	onMount(() => {
 		if (totalImages === 0) {
@@ -43,32 +53,16 @@
 		const imageUrls = works.map((work) => work.image);
 		cacheImages(imageUrls).catch(console.error);
 	});
+
+	$effect(() => {
+		if (params.tags && params.tags.length === 0) {
+			params.tags = null;
+		}
+	});
 </script>
 
-<!-- Profile Button -->
-<button
-	type="button"
-	class="fixed left-5 top-5 z-50 rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
-	onclick={() => ($openProfileModal = true)}
-	aria-label="Open Profile"
->
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		width="20"
-		height="20"
-		viewBox="0 0 24 24"
-		fill="none"
-		stroke="currentColor"
-		stroke-width="2"
-		stroke-linecap="round"
-		stroke-linejoin="round"
-	>
-		<circle cx="12" cy="8" r="5" />
-		<path d="M20 21a8 8 0 1 0-16 0" />
-	</svg>
-</button>
-
-<Profile data={data.profile} />
+<Nav tags={data.tags} />
+<About data={data.profile} />
 <ImageModal />
 
 {#if $isLoading}
@@ -87,7 +81,7 @@
 
 <div class="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
 	<div class="overflow-container relative h-full w-full">
-		{#each works as work}
+		{#each filteredWorks as work}
 			<Work {work} onLoaded={handleImageLoaded} />
 		{/each}
 	</div>
