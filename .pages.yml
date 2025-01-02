@@ -108,13 +108,16 @@ content:
       - name: avatar
         label: 'About Avatar'
         type: image
-      - name: bg-image
+        required: true
+      - name: bg_image
         label: 'Background Image'
         type: image
+        required: false
       - name: social
         label: 'Social Links'
         type: object
         list: true
+        required: false
         fields:
           - name: platform
             label: 'Platform'
@@ -132,11 +135,13 @@ content:
       - name: cv
         label: 'CV/Resume'
         type: object
+        required: false
         fields:
           - name: education
             label: 'Education'
             type: object
             list: true
+            required: false
             fields:
               - name: institution
                 label: 'Institution'
@@ -153,6 +158,7 @@ content:
             label: 'Exhibitions'
             type: object
             list: true
+            required: false
             fields:
               - name: title
                 label: 'Exhibition Title'
@@ -169,3 +175,4 @@ content:
               - name: description
                 label: 'Description'
                 type: text
+                required: false

@@ -34,6 +34,10 @@
 		if (e.target === dialog) dialog?.close();
 	}}
 >
+	<!-- Background image -->
+	<div class="absolute inset-0 bg-cover bg-center" style="background-image: url({data.bg_image})">
+		<div class="absolute inset-0 bg-black/50"></div>
+	</div>
 	<!-- Close button -->
 	<button
 		type="button"
@@ -61,7 +65,7 @@
 		<div class="mt-8">
 			<div class="mb-8 flex flex-col items-center gap-8">
 				{#if data.avatar}
-					<img src={data.avatar} alt="About" class="h-[150px] w-[150px] object-contain" />
+					<img src={data.avatar} alt="About" class="max-h-72 w-auto object-contain" />
 				{/if}
 
 				<div class="flex gap-4">
