@@ -108,6 +108,9 @@ content:
       - name: avatar
         label: 'About Avatar'
         type: image
+      - name: bg-image
+        label: 'Background Image'
+        type: image
       - name: social
         label: 'Social Links'
         type: object
