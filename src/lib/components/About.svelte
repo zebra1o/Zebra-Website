@@ -35,7 +35,10 @@
 	}}
 >
 	<!-- Background image -->
-	<div class="absolute inset-0 bg-cover bg-center" style="background-image: url({data.bg_image})">
+	<div
+		class="absolute inset-0 bg-contain bg-center bg-no-repeat"
+		style="background-image: url({data.bg_image})"
+	>
 		<div class="absolute inset-0 bg-black/50"></div>
 	</div>
 	<!-- Close button -->
@@ -139,18 +142,20 @@
 							</div>
 						{/if}
 
-						<div class="mt-8 flex gap-4">
-							{#each data.social as link}
-								<a
-									href={link.url}
-									target="_blank"
-									rel="noopener noreferrer"
-									class="rounded border border-white/20 px-4 py-2 transition-colors duration-200 hover:bg-white/10"
-								>
-									{link.platform}
-								</a>
-							{/each}
-						</div>
+						{#if data.social}
+							<div class="mt-8 flex gap-4">
+								{#each data.social as link}
+									<a
+										href={link.url}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="rounded border border-white/20 px-4 py-2 transition-colors duration-200 hover:bg-white/10"
+									>
+										{link.platform}
+									</a>
+								{/each}
+							</div>
+						{/if}
 					</div>
 				{/if}
 			</div>

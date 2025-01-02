@@ -1,17 +1,17 @@
 {
-  "bio": "<p>Tesing Bio</p>",
-  "email": "email@email.com",
-  "location": "Bari",
-  "avatar": "/media/global/pietra_logo.png",
-  "bg_image": "/media/global/circle_4k_trasp.png",
-  "social": [
-    {
-      "platform": "Instagram",
-      "url": "https://instagram.com/zebra"
-    },
-    {
-      "platform": "Behance",
-      "url": "https://www.behance.net/ze_bra"
-    }
-  ]
+	"bio": "<p>my art name is zebra and I'm a visual artist, illustrator and printer. i based my research on monochromatic configuration experimenting with xilography and etching and later i discovered silkscreen that allowed me to experimenting more with colors into visual art as a concept rather than as representation. I create instinctive drawings with colored pens, then I rework them, decompose them, and recombine them, printing them through screen printing.</p>",
+	"email": "email@email.com",
+	"location": "Bari",
+	"avatar": "/media/global/pietra_logo.png",
+	"bg_image": "/media/global/circle_4k_trasp.png",
+	"social": [
+		{
+			"platform": "Instagram",
+			"url": "https://instagram.com/zebra"
+		},
+		{
+			"platform": "Behance",
+			"url": "https://www.behance.net/ze_bra"
+		}
+	]
 }

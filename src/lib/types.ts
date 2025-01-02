@@ -67,6 +67,6 @@ export interface About {
 	location?: string;
 	avatar?: string;
 	bg_image?: string;
-	social: SocialLink[];
+	social?: SocialLink[];
 	cv?: CV;
 }
