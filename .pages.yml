@@ -35,7 +35,23 @@ content:
           min: 1
           max: 4
         options:
-          values: [3D, Print, Sculpture, Paint, Pen, Graphic, Screenprinting, Etching, Linocut, Digital, Extra, Illustration, Mixed Media, Gsplat]
+          values:
+            [
+              3D,
+              Print,
+              Sculpture,
+              Paint,
+              Pen,
+              Graphic,
+              Screenprinting,
+              Etching,
+              Linocut,
+              Digital,
+              Extra,
+              Illustration,
+              Mixed Media,
+              Gsplat
+            ]
       - name: has_model
         label: '3D Model'
         type: boolean
@@ -62,10 +78,10 @@ content:
         options:
           format: html
 
-  - name: profile
-    label: 'Profile'
+  - name: about
+    label: 'About'
     type: file
-    path: 'src/lib/about/profile.json'
+    path: 'src/lib/about/about.json'
     format: json
     icon: user
     fields:
@@ -85,7 +101,7 @@ content:
         label: 'Location'
         type: string
       - name: avatar
-        label: 'Profile Picture'
+        label: 'About Avatar'
         type: image
       - name: social
         label: 'Social Links'

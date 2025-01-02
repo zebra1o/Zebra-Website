@@ -61,7 +61,7 @@ export interface CV {
 	exhibitions: Exhibition[];
 }
 
-export interface Profile {
+export interface About {
 	bio: string;
 	email?: string;
 	location?: string;

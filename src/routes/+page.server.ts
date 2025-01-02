@@ -1,13 +1,13 @@
 import { tags, works } from '$lib/components/works.svelte';
-import profileJson from '$lib/about/profile.json';
-import type { Profile } from '$lib/types';
+import aboutJson from '$lib/about/about.json';
+import type { About } from '$lib/types';
 
 export const load = async () => {
-	const profile = profileJson as Profile;
+	const about = aboutJson as About;
 
 	return {
 		works: works.length === 0 ? [] : works,
 		tags: tags.length === 0 ? [] : tags,
-		profile
+		about
 	};
 };

@@ -9,11 +9,19 @@
 <Button
 	type="button"
 	size="icon"
-	class="fixed left-5 top-5 z-50 rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+	class="fixed left-5 top-5 z-50 bg-transparent hover:bg-transparent"
 	onclick={() => ($openAboutModal = true)}
 	aria-label="About"
 >
-	<svg
+	<img
+		src="/media/global/z_pixel_logo.png"
+		width="64"
+		height="64"
+		alt="Pietra Logo"
+		class="h-16 w-16 object-contain"
+	/>
+
+	<!-- <svg
 		xmlns="http://www.w3.org/2000/svg"
 		width="20"
 		height="20"
@@ -26,7 +34,7 @@
 	>
 		<circle cx="12" cy="8" r="5" />
 		<path d="M20 21a8 8 0 1 0-16 0" />
-	</svg>
+	</svg> -->
 </Button>
 
 <Filters {tags} />

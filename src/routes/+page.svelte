@@ -7,11 +7,10 @@
 	import { onMount } from 'svelte';
 	import { cacheImages } from '$lib/utils/imageCache';
 	import ImageModal from '$lib/components/viewers/ImageModal.svelte';
-	import type { Profile as ProfileType, WorkMetadata } from '$lib/types';
+	import type { About as AboutType, WorkMetadata } from '$lib/types';
 	import Nav from '$lib/components/Nav.svelte';
 
-	let { data }: { data: { works: WorkMetadata[]; profile: ProfileType; tags: string[] } } =
-		$props();
+	let { data }: { data: { works: WorkMetadata[]; about: AboutType; tags: string[] } } = $props();
 	let works = data.works;
 	let loadedImages = $state(0);
 
@@ -62,7 +61,7 @@
 </script>
 
 <Nav tags={data.tags} />
-<About data={data.profile} />
+<About data={data.about} />
 <ImageModal />
 
 {#if $isLoading}

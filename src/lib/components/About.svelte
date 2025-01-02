@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Profile } from '$lib/types';
+	import type { About } from '$lib/types';
 	import { openAboutModal } from '$lib/stores';
 
-	let { data }: { data: Profile } = $props();
+	let { data }: { data: About } = $props();
 	let activeTab = $state('bio');
 	let dialog: HTMLDialogElement | null = $state(null);
 
@@ -57,15 +57,11 @@
 		</svg>
 	</button>
 	<div class="relative">
-		<!-- Rest of the profile content -->
+		<!-- Rest of the about content -->
 		<div class="mt-8">
 			<div class="mb-8 flex flex-col items-center gap-8">
 				{#if data.avatar}
-					<img
-						src={data.avatar}
-						alt="Profile"
-						class="h-[150px] w-[150px] rounded-full object-cover"
-					/>
+					<img src={data.avatar} alt="About" class="h-[150px] w-[150px] object-contain" />
 				{/if}
 
 				<div class="flex gap-4">
