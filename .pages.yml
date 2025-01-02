@@ -35,7 +35,7 @@ content:
           min: 1
           max: 4
         options:
-          values: [3D, Print, Sculpture, Paint, Digital, Extra, Illustration, Mixed Media]
+          values: [3D, Print, Sculpture, Paint, Pen, Graphic, Screenprinting, Etching, Linocut, Digital, Extra, Illustration, Mixed Media, Gsplat]
       - name: has_model
         label: '3D Model'
         type: boolean
