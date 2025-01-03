@@ -1,5 +1,5 @@
 import { tags, works } from '$lib/components/works.svelte';
-import aboutJson from '$lib/about/about.json';
+import aboutJson from '$lib/db/about.json';
 import type { About } from '$lib/types';
 
 export const load = async () => {

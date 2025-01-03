@@ -14,7 +14,7 @@ content:
         search: ''
         sort: title
         order: asc
-    path: 'src/lib/works'
+    path: 'src/lib/db/works'
     fields:
       - name: title
         label: 'Title'
@@ -86,7 +86,7 @@ content:
   - name: about
     label: 'About'
     type: file
-    path: 'src/lib/about/about.json'
+    path: 'src/lib/db/about.json'
     format: json
     icon: user
     fields:

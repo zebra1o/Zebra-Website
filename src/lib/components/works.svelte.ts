@@ -1,7 +1,7 @@
 import type { WorkMetadata } from '$lib/types';
 
 // Import all markdown files dynamically
-const markdownFiles = import.meta.glob<{ metadata: WorkMetadata }>('/src/lib/works/*.md', {
+const markdownFiles = import.meta.glob<{ metadata: WorkMetadata }>('/src/lib/db/works/*.md', {
 	eager: true
 });
 
