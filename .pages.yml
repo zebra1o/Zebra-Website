@@ -176,3 +176,29 @@ content:
                 label: 'Description'
                 type: text
                 required: false
+  - name: global
+    label: 'Global'
+    type: file
+    path: 'src/lib/db/global.json'
+    format: json
+    icon: user
+    fields:
+      - name: title
+        label: 'Site Title'
+        type: string
+        required: true
+      - name: description
+        label: 'Description'
+        type: string
+        required: false
+      - name: keywords
+        label: 'Keywords'
+        type: string
+        required: false
+      - name: favicon
+        label: 'Favicon'
+        type: image
+        required: false
+        options:
+          input: static/media/global
+          output: /media/global
