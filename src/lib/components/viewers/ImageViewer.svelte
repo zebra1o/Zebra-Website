@@ -3,8 +3,10 @@
 	import CustomButton from '../CustomButton.svelte';
 	import { Separator } from '../ui/separator';
 	import { selectedWork } from '$lib/stores';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
+	import { useZoomImageWheel } from '@zoom-image/svelte';
+	import { cn } from '$lib/utils/shadcn';
 
 	// svelte-ignore non_reactive_update
 	let imageWheelContainer: HTMLDivElement;
@@ -12,30 +14,42 @@
 		currentZoom: 1
 	});
 
-	let zoomImage: any = null;
+	let cleanup: (() => void) | null = null;
+	let zoomImageInstance: ReturnType<typeof useZoomImageWheel> | null = null;
 
-	onMount(async () => {
-		if (browser) {
-			const { useZoomImageWheel } = await import('@zoom-image/svelte');
-			zoomImage = useZoomImageWheel();
-			zoomImage.zoomImageState.subscribe((value: any) => {
-				zoomState.currentZoom = value.currentZoom;
-			});
-			zoomImage.createZoomImage(imageWheelContainer);
-		}
+	onMount(() => {
+		if (!browser) return;
+
+		zoomImageInstance = useZoomImageWheel();
+		const unsubscribe = zoomImageInstance.zoomImageState.subscribe((value) => {
+			zoomState.currentZoom = value.currentZoom;
+		});
+
+		zoomImageInstance.createZoomImage(imageWheelContainer);
+
+		cleanup = () => {
+			unsubscribe();
+			// Add any additional cleanup if needed
+		};
+
+		return cleanup;
+	});
+
+	onDestroy(() => {
+		if (cleanup) cleanup();
 	});
 
 	function zoomIn() {
-		if (zoomImage) {
-			zoomImage.setZoomImageState({
+		if (zoomImageInstance && zoomState.currentZoom < 4) {
+			zoomImageInstance.setZoomImageState({
 				currentZoom: zoomState.currentZoom + 0.5
 			});
 		}
 	}
 
 	function zoomOut() {
-		if (zoomImage) {
-			zoomImage.setZoomImageState({
+		if (zoomImageInstance && zoomState.currentZoom > 1) {
+			zoomImageInstance.setZoomImageState({
 				currentZoom: zoomState.currentZoom - 0.5
 			});
 		}
@@ -66,7 +80,7 @@
 			<img
 				src={$selectedWork.image}
 				alt={$selectedWork.title}
-				class="h-full w-full object-contain"
+				class="h-full w-full cursor-grab object-contain active:cursor-grabbing"
 			/>
 		</div>
 	</div>
