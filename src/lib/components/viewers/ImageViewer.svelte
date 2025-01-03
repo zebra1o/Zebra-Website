@@ -3,38 +3,42 @@
 	import CustomButton from '../CustomButton.svelte';
 	import { Separator } from '../ui/separator';
 	import { selectedWork } from '$lib/stores';
-	import { useZoomImageWheel } from '@zoom-image/svelte';
-	import { type ZoomImageWheelState } from '@zoom-image/core';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	// svelte-ignore non_reactive_update
 	let imageWheelContainer: HTMLDivElement;
-	let {
-		createZoomImage: createZoomImageWheel,
-		zoomImageState: zoomImageWheelState,
-		setZoomImageState: setZoomImageWheelState
-	} = useZoomImageWheel();
-
-	let zoomImageWheelStateValue = $state<ZoomImageWheelState>() as ZoomImageWheelState;
-
-	zoomImageWheelState.subscribe((value) => {
-		zoomImageWheelStateValue = value;
+	let zoomState = $state({
+		currentZoom: 1
 	});
 
-	onMount(() => {
-		createZoomImageWheel(imageWheelContainer);
+	let zoomImage: any = null;
+
+	onMount(async () => {
+		if (browser) {
+			const { useZoomImageWheel } = await import('@zoom-image/svelte');
+			zoomImage = useZoomImageWheel();
+			zoomImage.zoomImageState.subscribe((value: any) => {
+				zoomState.currentZoom = value.currentZoom;
+			});
+			zoomImage.createZoomImage(imageWheelContainer);
+		}
 	});
 
 	function zoomIn() {
-		setZoomImageWheelState({
-			currentZoom: zoomImageWheelStateValue.currentZoom + 0.5
-		});
+		if (zoomImage) {
+			zoomImage.setZoomImageState({
+				currentZoom: zoomState.currentZoom + 0.5
+			});
+		}
 	}
 
 	function zoomOut() {
-		setZoomImageWheelState({
-			currentZoom: zoomImageWheelStateValue.currentZoom - 0.5
-		});
+		if (zoomImage) {
+			zoomImage.setZoomImageState({
+				currentZoom: zoomState.currentZoom - 0.5
+			});
+		}
 	}
 </script>
 
@@ -44,7 +48,7 @@
 		iconClass="size-4"
 		icon={Plus}
 		onClick={zoomIn}
-		disabled={zoomImageWheelStateValue.currentZoom >= 4}
+		disabled={zoomState.currentZoom >= 4}
 	/>
 	<Separator orientation="vertical" class="h-[40px] w-[0.5px] bg-primary" />
 	<CustomButton
@@ -52,7 +56,7 @@
 		iconClass="size-4"
 		icon={Minus}
 		onClick={zoomOut}
-		disabled={zoomImageWheelStateValue.currentZoom <= 1}
+		disabled={zoomState.currentZoom <= 1}
 	/>
 </div>
 
