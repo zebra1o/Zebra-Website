@@ -196,10 +196,7 @@ content:
         label: 'Keywords'
         type: string
         required: false
-      - name: favicon
-        label: 'Favicon'
+      - name: logo
+        label: 'Logo'
         type: image
         required: false
-        options:
-          input: static/media/global
-          output: /media/global
