@@ -81,7 +81,7 @@ export default defineConfig({
 		}
 	},
 	optimizeDeps: {
-		exclude: ['gsplat', '@zoom-image/core', '@zoom-image/svelte'],
+		exclude: ['gsplat'],
 		include: ['three', 'gsap']
 	},
 	assetsInclude: [
