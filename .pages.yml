@@ -187,6 +187,7 @@ content:
         label: 'Site Title'
         type: string
         required: true
+        default: 'Zebra Portfolio'
       - name: description
         label: 'Description'
         type: string
