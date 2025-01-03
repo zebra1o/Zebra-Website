@@ -63,7 +63,7 @@
 			<img src={data.avatar} alt="About" class="z-50 h-full max-h-40 w-auto object-contain" />
 		{/if}
 
-		<div class="relative flex w-full flex-col gap-6">
+		<div class="relative flex w-full flex-col gap-6 overflow-x-clip">
 			<!-- Background image -->
 			<div
 				class="absolute inset-0 z-0 h-full min-h-96 scale-125 bg-contain bg-center bg-no-repeat"
@@ -73,18 +73,10 @@
 			</div>
 			<div class="z-50 mb-20 flex w-full flex-col items-start gap-8">
 				<h3 class="w-full text-center text-2xl">zebra</h3>
-				<div class="flex w-full flex-row justify-between gap-16">
+				<div class="flex w-full flex-row justify-between gap-16 px-2">
 					{#each tabs as tab}
-						<!-- <button
-							class="border-b-2 px-4 py-2 transition-colors duration-200 {activeTab === tab
-								? 'border-white'
-								: 'border-transparent hover:border-white/50'}"
-							onclick={() => setActiveTab(tab)}
-						>
-							{tab.toUpperCase()}
-						</button> -->
 						<Button
-							class="w-full rounded-full bg-transparent checked:outline-white hover:bg-transparent hover:outline-white"
+							class="w-full rounded-full bg-transparent hover:border-primary/30 hover:bg-transparent aria-checked:border-primary"
 							size="lg"
 							variant="outline"
 							aria-checked={activeTab === tab}
