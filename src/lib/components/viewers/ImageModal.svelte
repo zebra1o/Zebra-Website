@@ -5,6 +5,7 @@
 	import { queryParameters } from 'sveltekit-search-params';
 	import CustomButton from '../CustomButton.svelte';
 	import { Separator } from '../ui/separator';
+	import ImageViewer from './ImageViewer.svelte';
 
 	const params = queryParameters({
 		art: true
@@ -48,25 +49,6 @@
 
 		<CustomButton ariaLabel="Close dialog" icon={X} onClick={() => dialog?.close()} />
 	</div>
-	<div class="fixed bottom-8 right-8 z-[60] flex flex-col items-center justify-center">
-		<CustomButton
-			ariaLabel="Zoom In"
-			iconClass="size-4"
-			icon={Plus}
-			onClick={() => {
-				console.log('zoom in');
-			}}
-		/>
-		<Separator orientation="vertical" class="h-[40px] w-[0.5px] bg-primary" />
-		<CustomButton
-			ariaLabel="Zoom Out"
-			iconClass="size-4"
-			icon={Minus}
-			onClick={() => {
-				console.log('zoom out');
-			}}
-		/>
-	</div>
 
 	<div class="relative">
 		{#if $selectedWork}
@@ -81,11 +63,7 @@
 						/>
 					</div>
 				{:else}
-					<img
-						src={$selectedWork.image}
-						alt={$selectedWork.title}
-						class="max-h-[85vh] max-w-[85vw] rounded object-contain"
-					/>
+					<ImageViewer />
 				{/if}
 			</div>
 

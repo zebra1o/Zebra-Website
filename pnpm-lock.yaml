@@ -11,6 +11,9 @@ importers:
       '@types/three':
         specifier: ^0.170.0
         version: 0.170.0
+      '@zoom-image/svelte':
+        specifier: ^0.3.0
+        version: 0.3.0(svelte@5.16.1)
       gsap:
         specifier: ^3.12.5
         version: 3.12.5
@@ -36,6 +39,9 @@ importers:
       '@types/slug':
         specifier: ^5.0.9
         version: 5.0.9
+      '@zoom-image/core':
+        specifier: ^0.39.0
+        version: 0.39.0
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
@@ -686,6 +692,9 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
+  '@namnode/store@0.1.0':
+    resolution: {integrity: sha512-4NGTldxKcmY0UuZ7OEkvCjs8ZEoeYB6M2UwMu74pdLiFMKxXbj9HdNk1Qn213bxX1O7bY5h+PLh5DZsTURZkYA==}
+
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -918,6 +927,14 @@ packages:
 
   '@webgpu/types@0.1.52':
     resolution: {integrity: sha512-eI883Nlag2hGIkhXxAnq8s4APpqXWuPL3Gbn2ghiU12UjLvfCbVqHK4XfXl3eLRTatqcMmeK7jws7IwWsGfbzw==}
+
+  '@zoom-image/core@0.39.0':
+    resolution: {integrity: sha512-JD6UghIOvfdRdI5FCFQRtvaJGht2gIpkzFp+5NrcwKXbHQwSfl00VQ9JQ0TYbaeHa6tc+dxgepYgJukCtrPVgg==}
+
+  '@zoom-image/svelte@0.3.0':
+    resolution: {integrity: sha512-0dfAPgpGRm+j6d3fn044swV7r821l2ZFJZmR0WqUATUUaPZ3GbDkDyrVuZGmP7s4QAk/Nvs1F3+cBhcMWt9Zfw==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -2516,6 +2533,8 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+  '@namnode/store@0.1.0': {}
+
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -2758,6 +2777,15 @@ snapshots:
       eslint-visitor-keys: 4.2.0
 
   '@webgpu/types@0.1.52': {}
+
+  '@zoom-image/core@0.39.0':
+    dependencies:
+      '@namnode/store': 0.1.0
+
+  '@zoom-image/svelte@0.3.0(svelte@5.16.1)':
+    dependencies:
+      '@zoom-image/core': 0.39.0
+      svelte: 5.16.1
 
   acorn-jsx@5.3.2(acorn@8.14.0):
     dependencies:
