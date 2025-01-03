@@ -7,6 +7,7 @@
 		buttonClass?: string;
 		ariaLabel?: string;
 		outline?: boolean;
+		disabled?: boolean;
 		onClick: () => void;
 	}
 
@@ -24,6 +25,7 @@
 	)}
 	onclick={props.onClick}
 	aria-label={props.ariaLabel}
+	disabled={props.disabled}
 >
 	<props.icon class={cn(props.iconClass, 'size-7 stroke-1 text-primary')}></props.icon>
 </Button>
