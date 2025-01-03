@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { openModal, selectedWork } from '$lib/stores';
+	import { Info, Minus, Plus, X } from 'lucide-svelte';
 	import ModelViewer from './ModelViewer.svelte';
 	import { queryParameters } from 'sveltekit-search-params';
+	import CustomButton from '../CustomButton.svelte';
+	import { Separator } from '../ui/separator';
 
 	const params = queryParameters({
 		art: true
@@ -34,52 +37,35 @@
 		if (e.target === dialog) dialog?.close();
 	}}
 >
-	<!-- Controls - moved outside the relative container -->
 	<div class="fixed right-8 top-8 z-[60] flex gap-2">
-		<button
-			type="button"
-			aria-label="Toggle info"
-			onclick={() => (showInfo = !showInfo)}
-			class="rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
-		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="20"
-				height="20"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<circle cx="12" cy="12" r="10" />
-				<path d="M12 16v-4" />
-				<path d="M12 8h.01" />
-			</svg>
-		</button>
+		<CustomButton
+			ariaLabel="Toggle info"
+			iconClass="size-4"
+			icon={Info}
+			outline={false}
+			onClick={() => (showInfo = !showInfo)}
+		/>
 
-		<button
-			type="button"
-			aria-label="Close dialog"
-			onclick={() => dialog?.close()}
-			class="rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
-		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="20"
-				height="20"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<path d="M18 6 6 18" />
-				<path d="m6 6 12 12" />
-			</svg>
-		</button>
+		<CustomButton ariaLabel="Close dialog" icon={X} onClick={() => dialog?.close()} />
+	</div>
+	<div class="fixed bottom-8 right-8 z-[60] flex flex-col items-center justify-center">
+		<CustomButton
+			ariaLabel="Zoom In"
+			iconClass="size-4"
+			icon={Plus}
+			onClick={() => {
+				console.log('zoom in');
+			}}
+		/>
+		<Separator orientation="vertical" class="h-[40px] w-[0.5px] bg-primary" />
+		<CustomButton
+			ariaLabel="Zoom Out"
+			iconClass="size-4"
+			icon={Minus}
+			onClick={() => {
+				console.log('zoom out');
+			}}
+		/>
 	</div>
 
 	<div class="relative">
