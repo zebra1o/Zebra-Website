@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { About } from '$lib/types';
 	import { openAboutModal } from '$lib/stores';
+	import Button from './ui/button/button.svelte';
 
 	let { data }: { data: About } = $props();
 	let activeTab = $state('bio');
@@ -34,13 +35,6 @@
 		if (e.target === dialog) dialog?.close();
 	}}
 >
-	<!-- Background image -->
-	<div
-		class="absolute inset-0 bg-contain bg-center bg-no-repeat"
-		style="background-image: url({data.bg_image})"
-	>
-		<div class="absolute inset-0 bg-black/50"></div>
-	</div>
 	<!-- Close button -->
 	<button
 		type="button"
@@ -63,33 +57,49 @@
 			<path d="m6 6 12 12" />
 		</svg>
 	</button>
-	<div class="relative">
+	<div class="relative flex flex-col items-center gap-6">
 		<!-- Rest of the about content -->
-		<div class="mt-8">
-			<div class="mb-8 flex flex-col items-center gap-8">
-				{#if data.avatar}
-					<img src={data.avatar} alt="About" class="max-h-72 w-auto object-contain" />
-				{/if}
+		{#if data.avatar}
+			<img src={data.avatar} alt="About" class="z-50 h-full max-h-40 w-auto object-contain" />
+		{/if}
 
-				<div class="flex gap-4">
+		<div class="relative flex w-full flex-col gap-6">
+			<!-- Background image -->
+			<div
+				class="absolute inset-0 z-0 h-full min-h-96 scale-125 bg-contain bg-center bg-no-repeat"
+				style="background-image: url({data.bg_image})"
+			>
+				<div class="absolute inset-0 bg-black/50"></div>
+			</div>
+			<div class="z-50 mb-20 flex w-full flex-col items-start gap-8">
+				<h3 class="w-full text-center text-2xl">zebra</h3>
+				<div class="flex w-full flex-row justify-between gap-16">
 					{#each tabs as tab}
-						<button
+						<!-- <button
 							class="border-b-2 px-4 py-2 transition-colors duration-200 {activeTab === tab
 								? 'border-white'
 								: 'border-transparent hover:border-white/50'}"
 							onclick={() => setActiveTab(tab)}
 						>
 							{tab.toUpperCase()}
-						</button>
+						</button> -->
+						<Button
+							class="w-full rounded-full bg-transparent checked:outline-white hover:bg-transparent hover:outline-white"
+							size="lg"
+							variant="outline"
+							aria-checked={activeTab === tab}
+							onclick={() => setActiveTab(tab)}
+						>
+							{tab}
+						</Button>
 					{/each}
 				</div>
-			</div>
-
-			<div class="mt-8">
 				{#if activeTab === 'bio'}
 					{#if data.bio}
-						<div class="prose prose-invert max-w-none">
-							{@html data.bio}
+						<div class="flex w-full items-center justify-center py-4">
+							<div class="prose prose-invert max-w-prose">
+								{@html data.bio}
+							</div>
 						</div>
 					{/if}
 				{:else if activeTab === 'cv'}
@@ -97,9 +107,9 @@
 						<div class="space-y-8">
 							{#if data.cv.education}
 								<section>
-									<h3 class="mb-4 text-xl font-semibold">Education</h3>
+									<h3 class="text-xl font-semibold">Education</h3>
 									{#each data.cv.education as edu}
-										<div class="mb-6">
+										<div>
 											<h4 class="text-lg font-medium">{edu.institution}</h4>
 											<p class="text-gray-300">{edu.degree}</p>
 											<p class="text-gray-400">{edu.year}</p>
@@ -110,9 +120,9 @@
 
 							{#if data.cv.exhibitions}
 								<section>
-									<h3 class="mb-4 text-xl font-semibold">Exhibitions</h3>
+									<h3 class="text-xl font-semibold">Exhibitions</h3>
 									{#each data.cv.exhibitions as exhibition}
-										<div class="mb-6">
+										<div>
 											<h4 class="text-lg font-medium">{exhibition.title}</h4>
 											<p class="text-gray-300">{exhibition.venue}</p>
 											<p class="text-gray-400">{exhibition.year}</p>

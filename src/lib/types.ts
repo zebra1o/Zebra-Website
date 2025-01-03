@@ -70,3 +70,10 @@ export interface About {
 	social?: SocialLink[];
 	cv?: CV;
 }
+
+export interface Global {
+	title: string;
+	description?: string;
+	keywords?: string;
+	logo?: string;
+}
