@@ -1,6 +1,7 @@
 {
-  "title": "Zebra Portfolio",
-  "description": "An Artist Portfolio",
+  "title": "Zebra",
+  "description": "Zebra is an artist.",
+  "keywords": "art, 3D, illustration, portfolio, zebra",
   "logo": "/media/global/z_pixel_logo.png",
   "filter_bg": "/media/global/filter_bg_image.png"
 }
