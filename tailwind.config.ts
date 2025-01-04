@@ -67,8 +67,11 @@ const config: Config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans],
+				sans: ['"Kode Mono"', ...fontFamily.sans],
+				jacquard: ['"Jacquard 12"', 'serif', ...fontFamily.sans],
+				jaini: ['"Jaini"', 'serif', ...fontFamily.sans],
 				mono: [
+					'"Kode Mono"',
 					'ui-monospace',
 					'SFMono-Regular',
 					'Menlo',
@@ -78,6 +81,12 @@ const config: Config = {
 					'Courier New',
 					'monospace'
 				]
+			},
+			fontWeight: {
+				normal: '400',
+				medium: '500',
+				semibold: '600',
+				bold: '700'
 			},
 			keyframes: {
 				'accordion-down': {

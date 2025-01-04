@@ -66,6 +66,11 @@
 	<title>{data.global.title}</title>
 	<meta name="description" content={data.global.description} />
 	<meta name="keywords" content={data.global.keywords} />
+	<meta name="image" content={data.global.logo} />
+	<meta name="author" content="Zebra" />
+	<meta property="og:title" content={data.global.title} />
+	<meta property="og:description" content={data.global.description} />
+	<meta property="og:image" content={data.global.logo} />
 </svelte:head>
 
 <Nav tags={data.tags} global={data.global} />

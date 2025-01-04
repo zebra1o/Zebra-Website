@@ -2,6 +2,8 @@
 	import type { About } from '$lib/types';
 	import { openAboutModal } from '$lib/stores';
 	import Button from './ui/button/button.svelte';
+	import CustomButton from './CustomButton.svelte';
+	import { X } from 'lucide-svelte';
 
 	let { data }: { data: About } = $props();
 	let activeTab = $state('bio');
@@ -35,28 +37,12 @@
 		if (e.target === dialog) dialog?.close();
 	}}
 >
-	<!-- Close button -->
-	<button
-		type="button"
-		aria-label="Close dialog"
-		onclick={() => dialog?.close()}
-		class="absolute right-4 top-4 rounded-full bg-white/10 p-2 transition-colors hover:bg-white/20"
-	>
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="16"
-			height="16"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="2"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-		>
-			<path d="M18 6 6 18" />
-			<path d="m6 6 12 12" />
-		</svg>
-	</button>
+	<CustomButton
+		buttonClass="absolute right-4 top-4"
+		outline={false}
+		icon={X}
+		onClick={() => dialog?.close()}
+	/>
 	<div class="relative flex flex-col items-center gap-6">
 		<!-- Rest of the about content -->
 		{#if data.avatar}
@@ -78,11 +64,11 @@
 				<div class="absolute inset-0 bg-black/50"></div>
 			</div>
 			<div class="z-50 mb-20 flex w-full flex-col items-start gap-8">
-				<h3 class="w-full text-center text-2xl">zebra</h3>
-				<div class="flex w-full flex-row justify-between gap-16 px-2">
+				<h3 class="w-full text-center font-jacquard text-6xl">zebra</h3>
+				<div class="flex w-full flex-row items-center justify-between gap-16 px-2">
 					{#each tabs as tab}
 						<Button
-							class="w-full rounded-full bg-transparent hover:border-primary/30 hover:bg-transparent aria-checked:border-primary"
+							class="w-full rounded-full bg-transparent font-jaini text-2xl font-medium tracking-[0.25em] text-primary/30 hover:border-primary/30 hover:bg-transparent hover:text-primary aria-checked:border-primary aria-checked:text-primary"
 							size="lg"
 							variant="outline"
 							aria-checked={activeTab === tab}

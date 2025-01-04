@@ -70,6 +70,6 @@
 		@apply border-border;
 	}
 	body {
-		@apply bg-background font-mono text-foreground;
+		@apply bg-background text-foreground;
 	}
 }
