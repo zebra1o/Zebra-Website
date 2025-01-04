@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { selectedWork } from '$lib/stores';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 </script>
 
 <!-- Info Panel -->
@@ -9,10 +10,20 @@
 		class="fixed inset-x-0 bottom-12 left-8 z-50 max-w-2xl border-collapse rounded-xl bg-black/20 backdrop-blur-sm"
 	>
 		<div
-			class="max-h-[60vh] overflow-y-auto px-4 py-6 text-white [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+			class="max-h-[50vh] overflow-y-auto px-4 py-6 text-white [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 		>
-			<div class="flex items-start justify-between gap-4">
-				<h3 class="font-jacquard text-5xl leading-none tracking-widest">{$selectedWork.title}</h3>
+			<div class="flex items-center justify-between gap-4">
+				<Tooltip.Provider>
+					<Tooltip.Root>
+						<Tooltip.Trigger>
+							<h3 class="font-jacquard text-5xl tracking-widest">{$selectedWork.title}</h3>
+						</Tooltip.Trigger>
+						<Tooltip.Content>
+							{$selectedWork.title}
+						</Tooltip.Content>
+					</Tooltip.Root>
+				</Tooltip.Provider>
+
 				{#if $selectedWork.tags && $selectedWork.tags.length > 0}
 					<div class="flex flex-col justify-end gap-2">
 						{#each $selectedWork.tags as tag}
