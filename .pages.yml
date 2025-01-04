@@ -65,9 +65,9 @@ content:
         options:
           values:
             [
-              { value: glb, label: '.glb' }
-              { value: gltf, label: '.gltf' }
-              { value: splat, label: '.splat' }
+              { value: glb, label: '.glb' },
+              { value: gltf, label: '.gltf' },
+              { value: splat, label: '.splat' },
               { value: ply, label: '.ply' }
             ]
       - name: model_file
