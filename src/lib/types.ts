@@ -3,11 +3,11 @@ export type ModelFormat = 'glb' | 'gltf' | 'splat' | 'ply';
 export interface WorkMetadata {
 	title: string;
 	image: string;
-	tags: string[];
+	year?: string;
 	description?: string;
-	year: string;
-	has_model: boolean;
-	model_format?: ModelFormat;
+	tags?: string[];
+	has_model?: boolean;
+	model_format?: string;
 	model_file?: string;
 }
 
@@ -62,18 +62,46 @@ export interface CV {
 }
 
 export interface About {
-	bio: string;
+	bio?: string;
 	email?: string;
 	location?: string;
 	avatar?: string;
 	bg_image?: string;
-	social?: SocialLink[];
-	cv?: CV;
+	cv?: {
+		education?: {
+			institution: string;
+			degree: string;
+			year: string;
+		}[];
+		exhibitions?: {
+			title: string;
+			venue: string;
+			year: string;
+			description?: string;
+		}[];
+	};
+	social?: {
+		platform: string;
+		url: string;
+	}[];
 }
 
 export interface Global {
 	title: string;
-	description?: string;
+	description: string;
+	logo: string;
 	keywords?: string;
-	logo?: string;
+}
+
+export interface SearchResult {
+	id: number;
+	score: number;
+	doc: WorkMetadata;
+}
+
+export interface SearchOptions {
+	limit?: number;
+	suggest?: boolean;
+	bool?: 'and' | 'or';
+	fields?: string[];
 }

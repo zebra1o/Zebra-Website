@@ -1,76 +1,101 @@
 import FlexSearch from 'flexsearch';
-import type { WorkMetadata } from '$lib/types';
+import type { WorkMetadata, SearchOptions } from '$lib/types';
+import slug from 'slug';
 
-let worksIndex: FlexSearch.Index;
-let works: WorkMetadata[];
+interface WorkDocument {
+	id: number;
+	title: string;
+	year: string;
+	description: string;
+	tags: string[];
+	image: string;
+}
 
-export function createWorksIndex(data: WorkMetadata[]) {
-	// create the works index
-	worksIndex = new FlexSearch.Index({
-		tokenize: 'forward',
-		preset: 'performance',
-		optimize: true
-	});
+type FlexSearchResult = {
+	field: string;
+	result: number[];
+};
 
-	data.forEach((work, i) => {
-		// index the title and content together
-		const item = `${work.title} ${work.year} ${work.description} ${work.tags?.join(' ')}`;
-		// add the item to the index 👍️
-		worksIndex.add(i, item);
-	});
+let documentIndex: FlexSearch.Document<WorkDocument>;
+let works: WorkMetadata[] = [];
+const workTagsMap = new Map<number, Set<string>>();
 
-	console.log('worksIndex created');
-
+export function createWorksIndex(data: WorkMetadata[]): void {
 	works = data;
+	workTagsMap.clear();
+
+	documentIndex = new FlexSearch.Document<WorkDocument>({
+		document: {
+			id: 'id',
+			index: ['title', 'description', 'year']
+		},
+		tokenize: 'forward',
+		resolution: 9,
+		cache: false,
+		worker: false,
+		context: false
+	});
+
+	data.forEach((work, id) => {
+		documentIndex.add({
+			id,
+			title: work.title,
+			year: work.year || '',
+			description: work.description || '',
+			tags: work.tags || [],
+			image: work.image
+		});
+
+		// Store slugified tags for each work
+		if (work.tags?.length) {
+			workTagsMap.set(id, new Set(work.tags.map((tag) => slug(tag))));
+		}
+	});
 }
 
-export function searchWorksIndex(searchTerm: string) {
-	// escape special regex characters
-	const match = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	// return matching work indexes 💪
-	const results = worksIndex.search(match);
+export function searchWorksIndex(searchTerm: string, options: SearchOptions = {}): WorkMetadata[] {
+	if (!searchTerm || searchTerm === '') return works;
 
-	return results.map((index) => works[index as number]);
+	const fields = options.fields || ['title', 'description', 'year'];
+	const results = fields.flatMap((field) =>
+		documentIndex.search(searchTerm, [field])
+	) as FlexSearchResult[];
+
+	const matchedIds = new Set(results.flatMap((r) => r.result));
+	return Array.from(matchedIds).map((id) => works[id]);
 }
 
-export function searchWorksByTags(tags: string[]) {
-	const results = worksIndex.search(tags.join(' '));
-	return results.map((index) => works[index as number]);
+export function filterByTags(tags: string[]): WorkMetadata[] {
+	if (!tags || tags.length === 0) return works;
+
+	// Tags are already slugified from the UI
+	return works.filter((_, index) => {
+		const workTags = workTagsMap.get(index);
+		if (!workTags) return false;
+		// OR operation: work should have at least one of the selected tags
+		return tags.some((tag) => workTags.has(tag));
+	});
 }
 
-// function getMatches(text: string, searchTerm: string, limit = 1) {
-// 	// create dynamic regex 😎
-// 	const regex = new RegExp(searchTerm, 'gi');
-// 	// word indexes
-// 	const indexes = [];
-// 	// matches count
-// 	let matches = 0;
-// 	// current match in loop
-// 	let match;
+export function searchInFilteredWorks(
+	searchTerm: string,
+	filteredWorks: WorkMetadata[]
+): WorkMetadata[] {
+	if (!searchTerm || searchTerm === '') return filteredWorks;
 
-// 	while ((match = regex.exec(text)) !== null && matches < limit) {
-// 		// push that shit
-// 		indexes.push(match.index);
-// 		// increment matches
-// 		matches++;
-// 	}
+	// Create a map of works to their original indices
+	const workToIndexMap = new Map(works.map((work, index) => [work, index]));
 
-// 	// take the word index...
-// 	return indexes.map((index) => {
-// 		// go back 20 characters
-// 		const start = index - 20;
-// 		// go forward 80 characters
-// 		const end = index + 80;
-// 		// yoink the text
-// 		const excerpt = text.substring(start, end).trim();
-// 		// return excerpt 🤝
-// 		return `...${replaceTextWithMarker(excerpt, searchTerm)}...`;
-// 	});
-// }
+	const fields = ['title', 'description', 'year'];
+	const results = fields.flatMap((field) =>
+		documentIndex.search(searchTerm, [field])
+	) as FlexSearchResult[];
 
-// function replaceTextWithMarker(text: string, match: string) {
-// 	// create dynamic regex 😎
-// 	const regex = new RegExp(match, 'gi');
-// 	// preserves the text casing 🤙
-// 	return text.replaceAll(regex, (match) => `<mark>${match}</mark>`);
-// }
+	const matchedIds = new Set(results.flatMap((r) => r.result));
+
+	// Filter works that are both in the filtered set and match the search
+	return filteredWorks.filter((work) => {
+		const originalIndex = workToIndexMap.get(work);
+		return originalIndex !== undefined && matchedIds.has(originalIndex);
+	});
+}

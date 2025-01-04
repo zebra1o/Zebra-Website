@@ -4,7 +4,12 @@
 	import { queryParameters, ssp } from 'sveltekit-search-params';
 
 	import type { About as AboutType, WorkMetadata, Global as GlobalType } from '$lib/types';
-	import { createWorksIndex, searchWorksByTags, searchWorksIndex } from '$lib/utils/search';
+	import {
+		createWorksIndex,
+		searchWorksIndex,
+		filterByTags,
+		searchInFilteredWorks
+	} from '$lib/utils/search';
 	import { openModal, selectedWork } from '$lib/stores';
 
 	import Work from '$lib/components/Work.svelte';
@@ -32,16 +37,16 @@
 
 	let filteredWorks = $derived.by(() => {
 		if (searchIndexStatus !== 'ready') return works;
+
+		// First filter by tags if any
+		let results = tags && tags.length > 0 ? filterByTags(tags) : works;
+
+		// Then search in filtered results if search term exists
 		if (search && search !== '') {
-			console.log('filter by search:', search);
-			return searchWorksIndex(search);
-		} else if (tags && tags.length > 0) {
-			console.log('filter by tags:', tags);
-			return searchWorksByTags(tags);
-		} else {
-			console.log('just unfiltered works');
-			return works;
+			results = searchInFilteredWorks(search, results);
 		}
+
+		return results;
 	});
 
 	$effect(() => {
