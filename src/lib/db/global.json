@@ -1,5 +1,6 @@
 {
   "title": "Zebra Portfolio",
   "description": "An Artist Portfolio",
-  "logo": "/media/global/z_pixel_logo.png"
+  "logo": "/media/global/z_pixel_logo.png",
+  "filter_bg": "/media/global/filter_bg_image.png"
 }
