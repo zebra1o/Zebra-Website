@@ -81,7 +81,7 @@ content:
         type: rich-text
         required: false
         options:
-          format: html
+          format: markdown
 
   - name: about
     label: 'About'
@@ -94,7 +94,7 @@ content:
         label: 'Biography'
         type: rich-text
         options:
-          format: html
+          format: markdown
         required: true
       - name: email
         label: 'Email'

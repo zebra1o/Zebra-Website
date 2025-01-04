@@ -25,8 +25,8 @@
 			<p class="mt-4 text-sm text-gray-300">{$selectedWork.year}</p>
 
 			{#if $selectedWork.description}
-				<div class="description-content mt-4 text-sm">
-					{@html $selectedWork.description}
+				<div class="description-content prose prose-invert mt-4 max-w-prose text-sm">
+					{$selectedWork.description}
 				</div>
 			{/if}
 		</div>

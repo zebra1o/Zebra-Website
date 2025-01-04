@@ -16,6 +16,7 @@
 		"@sveltejs/enhanced-img": "^0.4.4",
 		"@sveltejs/kit": "^2.15.1",
 		"@sveltejs/vite-plugin-svelte": "^4.0.4",
+		"@tailwindcss/typography": "^0.5.15",
 		"@types/eslint": "^9.6.1",
 		"@types/slug": "^5.0.9",
 		"@zoom-image/core": "^0.39.0",
