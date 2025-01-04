@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { openModal, selectedWork } from '$lib/stores';
-	import { Info, Minus, Plus, X } from 'lucide-svelte';
+	import { Info, X } from 'lucide-svelte';
 	import ModelViewer from './ModelViewer.svelte';
 	import { queryParameters } from 'sveltekit-search-params';
 	import CustomButton from '../CustomButton.svelte';
-	import { Separator } from '../ui/separator';
 	import ImageViewer from './ImageViewer.svelte';
+	import InfoPanel from './InfoPanel.svelte';
 
 	const params = queryParameters({
 		art: true
@@ -66,36 +66,8 @@
 					<ImageViewer />
 				{/if}
 			</div>
-
-			<!-- Info Panel -->
 			{#if showInfo}
-				<div
-					class="fixed inset-x-0 bottom-8 z-50 mx-auto max-w-4xl rounded-xl bg-black/50 p-4 backdrop-blur-sm"
-				>
-					<div
-						class="max-h-[60vh] overflow-y-auto p-4 text-white [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-					>
-						<div class="flex items-start justify-between gap-4">
-							<h3 class="text-2xl font-semibold">{$selectedWork.title}</h3>
-							{#if $selectedWork.tags?.length > 0}
-								<div class="flex flex-wrap justify-end gap-2">
-									{#each $selectedWork.tags as tag}
-										<span class="rounded-full bg-white/10 px-2 py-1 text-xs font-medium">{tag}</span
-										>
-									{/each}
-								</div>
-							{/if}
-						</div>
-
-						<p class="mt-4 text-sm text-gray-300">{$selectedWork.year}</p>
-
-						{#if $selectedWork.description}
-							<div class="description-content mt-4 text-sm">
-								{@html $selectedWork.description}
-							</div>
-						{/if}
-					</div>
-				</div>
+				<InfoPanel />
 			{/if}
 		{/if}
 	</div>
