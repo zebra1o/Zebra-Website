@@ -38,20 +38,20 @@ content:
         options:
           values:
             [
-              3D,
-              Print,
-              Sculpture,
-              Paint,
-              Pen,
-              Graphic,
-              Screenprinting,
-              Etching,
-              Linocut,
-              Digital,
-              Extra,
-              Illustration,
-              Mixed Media,
-              Gsplat
+              { value: 3D, label: '3D' },
+              { value: Print, label: 'Print' },
+              { value: Sculpture, label: 'Sculpture' },
+              { value: Paint, label: 'Paint' },
+              { value: Pen, label: 'Pen' },
+              { value: Graphic, label: 'Graphic' },
+              { value: Screenprinting, label: 'Screenprinting' },
+              { value: Etching, label: 'Etching' },
+              { value: Linocut, label: 'Linocut' },
+              { value: Digital, label: 'Digital' },
+              { value: Extra, label: 'Extra' },
+              { value: Illustration, label: 'Illustration' },
+              { value: Mixed Media, label: 'Mixed Media' },
+              { value: Gsplat, label: 'Gsplat' },
             ]
       - name: has_model
         label: '3D Model'
@@ -61,8 +61,15 @@ content:
         label: 'Model Format'
         type: select
         required: false
+        default: null
         options:
-          values: [glb, gltf, splat, ply]
+          values:
+            [
+              { value: glb, label: '.glb' }
+              { value: gltf, label: '.gltf' }
+              { value: splat, label: '.splat' }
+              { value: ply, label: '.ply' }
+            ]
       - name: model_file
         label: 'Model File'
         type: image
