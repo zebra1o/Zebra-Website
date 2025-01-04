@@ -38,20 +38,20 @@ content:
         options:
           values:
             [
-              { value: 3D, label: '3D' },
-              { value: Print, label: 'Print' },
-              { value: Sculpture, label: 'Sculpture' },
-              { value: Paint, label: 'Paint' },
-              { value: Pen, label: 'Pen' },
-              { value: Graphic, label: 'Graphic' },
-              { value: Screenprinting, label: 'Screenprinting' },
-              { value: Etching, label: 'Etching' },
-              { value: Linocut, label: 'Linocut' },
-              { value: Digital, label: 'Digital' },
-              { value: Extra, label: 'Extra' },
-              { value: Illustration, label: 'Illustration' },
-              { value: Mixed Media, label: 'Mixed Media' },
-              { value: Gsplat, label: 'Gsplat' },
+              { value: 3d, label: '3D' },
+              { value: print, label: 'Print' },
+              { value: sculpture, label: 'Sculpture' },
+              { value: paint, label: 'Paint' },
+              { value: pen, label: 'Pen' },
+              { value: graphic, label: 'Graphic' },
+              { value: screenprinting, label: 'Screenprinting' },
+              { value: etching, label: 'Etching' },
+              { value: linocut, label: 'Linocut' },
+              { value: digital, label: 'Digital' },
+              { value: extra, label: 'Extra' },
+              { value: illustration, label: 'Illustration' },
+              { value: mixed_media, label: 'Mixed Media' },
+              { value: gsplat, label: 'Gsplat' },
             ]
       - name: has_model
         label: '3D Model'
@@ -87,8 +87,6 @@ content:
         label: 'Description'
         type: rich-text
         required: false
-        options:
-          format: markdown
 
   - name: about
     label: 'About'
@@ -100,8 +98,6 @@ content:
       - name: bio
         label: 'Biography'
         type: rich-text
-        options:
-          format: markdown
         required: true
       - name: email
         label: 'Email'
@@ -196,15 +192,15 @@ content:
         required: true
         default: 'Zebra Portfolio'
       - name: description
-        label: 'Description'
+        label: 'Site Description'
         type: string
         required: false
       - name: keywords
-        label: 'Keywords'
+        label: 'Site Keywords'
         type: string
         required: false
       - name: logo
-        label: 'Logo'
+        label: 'Site Logo'
         type: image
         required: false
       - name: filter_bg
