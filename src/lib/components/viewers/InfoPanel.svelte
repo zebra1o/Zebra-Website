@@ -13,7 +13,7 @@
 		>
 			<div class="flex items-start justify-between gap-4">
 				<h3 class="text-xl font-semibold">{$selectedWork.title}</h3>
-				{#if $selectedWork.tags?.length > 0}
+				{#if $selectedWork.tags && $selectedWork.tags.length > 0}
 					<div class="flex flex-col justify-end gap-2">
 						{#each $selectedWork.tags as tag}
 							<span class="text-xs font-medium">{tag}</span>

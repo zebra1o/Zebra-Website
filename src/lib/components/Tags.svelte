@@ -27,7 +27,7 @@
 
 <ScrollArea>
 	{#each tags as tag}
-		<div class="group flex flex-row items-center justify-between gap-2 border-b p-3">
+		<div class="group flex flex-row items-center justify-between gap-2 border-b px-3 py-2">
 			<Button
 				class="peer w-full justify-start rounded-none text-lg font-thin tracking-widest text-primary/80 group-hover:font-semibold group-hover:text-primary aria-selected:font-bold aria-selected:text-primary"
 				variant="link"

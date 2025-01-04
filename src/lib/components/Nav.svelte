@@ -25,4 +25,4 @@
 	/>
 </Button>
 
-<Filters {tags} />
+<Filters {tags} bg_image={global.filter_bg} />

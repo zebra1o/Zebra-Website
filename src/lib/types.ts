@@ -88,8 +88,9 @@ export interface About {
 
 export interface Global {
 	title: string;
-	description: string;
-	logo: string;
+	description?: string;
+	logo?: string;
+	filter_bg?: string;
 	keywords?: string;
 }
 

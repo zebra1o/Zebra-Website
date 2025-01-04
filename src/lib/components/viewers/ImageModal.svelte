@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { openModal, selectedWork } from '$lib/stores';
-	import { Info, X } from 'lucide-svelte';
+	import { X, EllipsisVertical } from 'lucide-svelte';
 	import ModelViewer from './ModelViewer.svelte';
 	import { queryParameters } from 'sveltekit-search-params';
 	import CustomButton from '../CustomButton.svelte';
 	import ImageViewer from './ImageViewer.svelte';
 	import InfoPanel from './InfoPanel.svelte';
+	import type { ModelFormat } from '$lib/types';
 
 	const params = queryParameters({
 		art: true
@@ -42,7 +43,7 @@
 		<CustomButton
 			ariaLabel="Toggle info"
 			iconClass="size-4"
-			icon={Info}
+			icon={EllipsisVertical}
 			outline={false}
 			onClick={() => (showInfo = !showInfo)}
 		/>
@@ -57,7 +58,7 @@
 				{#if $selectedWork.has_model && $selectedWork.model_format && $selectedWork.model_file}
 					<div class="h-[85vh] w-[85vw]">
 						<ModelViewer
-							format={$selectedWork.model_format}
+							format={$selectedWork.model_format as ModelFormat}
 							file={$selectedWork.model_file}
 							className="h-full w-full"
 						/>

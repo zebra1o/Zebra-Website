@@ -22,4 +22,4 @@
 	);
 </script>
 
-<Input type="search" bind:value={searchText} oninput={search} placeholder="Search" />
+<Input type="search" bind:value={searchText} oninput={search} placeholder="type to search" />
