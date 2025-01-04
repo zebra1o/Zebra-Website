@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import { enhancedImages } from '@sveltejs/enhanced-img';
 
 const createManualChunks = (id: string) => {
 	// Vendor dependencies
@@ -44,7 +45,7 @@ const createManualChunks = (id: string) => {
 		if (id.includes('/stores/') || id.includes('gsap.config')) {
 			return 'app-core';
 		}
-		// Utils (including imageCache)
+		// Utils
 		if (id.includes('/utils/')) {
 			return 'app-components'; // Merge with components since it's small
 		}
@@ -60,6 +61,7 @@ const createManualChunks = (id: string) => {
 
 export default defineConfig({
 	plugins: [
+		enhancedImages(),
 		sveltekit(),
 		{
 			name: 'configure-response-headers',

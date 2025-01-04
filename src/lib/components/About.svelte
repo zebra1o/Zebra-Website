@@ -60,7 +60,13 @@
 	<div class="relative flex flex-col items-center gap-6">
 		<!-- Rest of the about content -->
 		{#if data.avatar}
-			<img src={data.avatar} alt="About" class="z-50 h-full max-h-40 w-auto object-contain" />
+			<enhanced:img
+				fetchpriority="low"
+				loading="lazy"
+				src={data.avatar as string}
+				alt="About"
+				class="z-50 h-full max-h-40 w-auto object-contain"
+			/>
 		{/if}
 
 		<div class="relative flex w-full flex-col gap-6 overflow-x-clip">

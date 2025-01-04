@@ -2,7 +2,6 @@
 	import { gsap, Draggable } from '$lib/gsap.config';
 	import { untrack } from 'svelte';
 	import type { WorkMetadata } from '$lib/types';
-	import { getCachedImage } from '$lib/utils/imageCache';
 	import { selectedWork, openModal } from '$lib/stores';
 	import { queryParameters } from 'sveltekit-search-params';
 	import slug from 'slug';
@@ -48,53 +47,13 @@
 		}
 	}
 
-	async function preloadImage(src: string): Promise<void> {
-		try {
-			const cachedImage = await getCachedImage(src);
-			if (cachedImage) {
-				const blob = await cachedImage.blob();
-				const objectUrl = URL.createObjectURL(blob);
-				await new Promise<void>((resolve) => {
-					const img = new Image();
-					img.onload = () => {
-						resolve();
-					};
-					img.src = objectUrl;
-				});
-				URL.revokeObjectURL(objectUrl);
-				return;
-			}
-		} catch (error) {
-			console.error('Error loading cached image:', error);
-		}
-
-		// Fallback to normal loading if cache fails
-		return new Promise((resolve) => {
-			const img = new Image();
-			img.onload = () => {
-				resolve();
-			};
-			img.src = src;
-		});
-	}
-
 	$effect.pre(() => {
 		untrack(async () => {
 			if (!cardElement) return;
-			await preloadImage(work.image);
-
 			const initialPos = getRandomPosition();
-
 			gsap.set(cardElement, {
 				x: initialPos.x,
-				y: initialPos.y,
-				opacity: 0
-			});
-
-			gsap.to(cardElement, {
-				opacity: 1,
-				duration: 0.3,
-				delay: Math.random() * 0.5
+				y: initialPos.y
 			});
 		});
 
@@ -136,10 +95,17 @@
 
 <button
 	bind:this={cardElement}
-	class="absolute h-auto touch-none opacity-0"
+	class="absolute h-auto touch-none"
 	style="touch-action: none;"
+	aria-label={work.title}
 >
 	<div class="relative h-auto w-[150px] overflow-hidden sm:w-[300px]">
-		<img src={work.image} alt={work.title} class="h-full w-full object-contain" />
+		<enhanced:img
+			fetchpriority="low"
+			loading="lazy"
+			src={work.image as string}
+			alt={work.title}
+			class="h-full w-full object-contain"
+		/>
 	</div>
 </button>

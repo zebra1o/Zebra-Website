@@ -14,8 +14,10 @@
 	onclick={() => ($openAboutModal = true)}
 	aria-label="About"
 >
-	<img
-		src={global.logo}
+	<enhanced:img
+		fetchpriority="high"
+		loading="eager"
+		src={global.logo as string}
 		width="64"
 		height="64"
 		alt={`${global.title} Logo`}

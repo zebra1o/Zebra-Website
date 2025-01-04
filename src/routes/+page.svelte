@@ -10,7 +10,7 @@
 		filterByTags,
 		searchInFilteredWorks
 	} from '$lib/utils/search';
-	import { openModal, selectedWork } from '$lib/stores';
+	import { isLoading, openModal, selectedWork } from '$lib/stores';
 
 	import Work from '$lib/components/Work.svelte';
 	import About from '$lib/components/About.svelte';
@@ -57,6 +57,7 @@
 				$selectedWork = works.find((work) => slug(work.title) === params.art) ?? null;
 				$openModal = true;
 			}
+			$isLoading = false;
 		});
 	});
 </script>
@@ -70,14 +71,17 @@
 <Nav tags={data.tags} global={data.global} />
 <About data={data.about} />
 <ImageModal />
-<Loader works={filteredWorks} />
-<div class="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
-	<div class="overflow-container h-full w-full">
-		{#each filteredWorks as work}
-			<Work {work} />
-		{/each}
+{#if $isLoading}
+	<Loader />
+{:else}
+	<div class="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
+		<div class="overflow-container h-full w-full">
+			{#each filteredWorks as work}
+				<Work {work} />
+			{/each}
+		</div>
 	</div>
-</div>
+{/if}
 
 <style>
 	.overflow-container {
