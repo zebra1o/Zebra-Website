@@ -5,6 +5,7 @@
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 	import type { ViewerProps } from '$lib/types';
+	import Loader from '../Loader.svelte';
 
 	const props: ViewerProps = $props();
 	const state = $state({
@@ -268,7 +269,7 @@
 <div class="relative h-full w-full" bind:this={container}>
 	{#if state.loading}
 		<div class="absolute inset-0 z-10 flex items-center justify-center bg-transparent">
-			<div class="text-white">Loading...</div>
+			<Loader />
 		</div>
 	{/if}
 	{#if state.error}

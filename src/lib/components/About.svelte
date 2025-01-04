@@ -84,8 +84,8 @@
 					<ScrollArea class="max-h-64 overflow-y-auto">
 						{#if activeTab === 'bio'}
 							{#if data.bio}
-								<div class="prose prose-invert max-w-prose">
-									{data.bio}
+								<div class="prose prose-invert max-w-prose lg:prose-lg">
+									{@html data.bio}
 								</div>
 							{/if}
 						{:else if activeTab === 'cv'}

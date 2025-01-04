@@ -36,6 +36,9 @@ content:
         label: 'Description'
         type: rich-text
         required: false
+        options:
+          format: html
+
       - name: tags
         label: Tags
         type: select
@@ -59,7 +62,7 @@ content:
               { value: extra, label: 'Extra' },
               { value: illustration, label: 'Illustration' },
               { value: mixed_media, label: 'Mixed Media' },
-              { value: gsplat, label: 'Gsplat' },
+              { value: gsplat, label: 'Gsplat' }
             ]
       - name: has_model
         label: '3D Model'
@@ -99,6 +102,8 @@ content:
         label: 'Biography'
         type: rich-text
         required: true
+        options:
+          format: html
       - name: email
         label: 'Email'
         type: string

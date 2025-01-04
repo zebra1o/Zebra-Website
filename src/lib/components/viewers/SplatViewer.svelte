@@ -2,6 +2,7 @@
 	import { untrack } from 'svelte';
 	import * as SPLAT from 'gsplat';
 	import type { ViewerProps } from '$lib/types';
+	import Loader from '../Loader.svelte';
 
 	const props: ViewerProps = $props();
 	const splat_state = $state({
@@ -204,7 +205,7 @@
 <div class="relative h-full w-full" bind:this={container}>
 	{#if splat_state.loading}
 		<div class="absolute inset-0 z-10 flex items-center justify-center bg-transparent">
-			<div class="text-white">Loading...</div>
+			<Loader />
 		</div>
 	{/if}
 	{#if splat_state.error}

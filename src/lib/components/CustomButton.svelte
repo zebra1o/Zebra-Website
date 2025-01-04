@@ -19,7 +19,7 @@
 	size="icon"
 	class={cn(
 		props.buttonClass,
-		'rounded-full bg-transparent p-0 hover:bg-transparent',
+		'rounded-full bg-transparent p-0 hover:bg-transparent focus:bg-transparent focus:!outline-none',
 		outline &&
 			'p-2 outline outline-[0.5px] outline-primary hover:!outline-primary focus:!outline focus:!outline-primary'
 	)}
