@@ -28,6 +28,14 @@ content:
           input: static/media/images
           output: /media/images
         required: true
+      - name: year
+        label: Year
+        type: string
+        required: false
+      - name: description
+        label: 'Description'
+        type: rich-text
+        required: false
       - name: tags
         label: Tags
         type: select
@@ -79,14 +87,6 @@ content:
           input: static/media/models
           output: /media/models
           extensions: [glb, gltf, splat, ply]
-      - name: year
-        label: Year
-        type: string
-        required: false
-      - name: description
-        label: 'Description'
-        type: rich-text
-        required: false
 
   - name: about
     label: 'About'
