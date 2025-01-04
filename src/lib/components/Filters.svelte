@@ -1,45 +1,40 @@
 <script lang="ts">
-	import * as Sheet from '$lib/components/ui/sheet/index.js';
-	import { Input } from '$lib/components/ui/input';
-	import X from 'lucide-svelte/icons/x';
-	import Tags from './Tags.svelte';
-	let { tags }: { tags: string[] } = $props();
 	import { queryParameters, ssp } from 'sveltekit-search-params';
-	const params = queryParameters({
-		tags: ssp.array<string>()
-	});
+	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import { Badge } from '$lib/components/ui/badge';
+	import Tags from './Tags.svelte';
+	import Search from './Search.svelte';
+	import { SearchIcon, X } from 'lucide-svelte';
+
+	let { tags }: { tags: string[] } = $props();
+
+	const params = queryParameters({
+		tags: ssp.array<string>(),
+		search: true
+	});
 </script>
 
 <Sheet.Root>
 	<Sheet.Trigger
-		class="fixed right-5 top-5 z-50 flex flex-row gap-2 rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+		class="fixed right-5 top-5 z-50 flex flex-row gap-2 rounded-full bg-transparent p-2 text-white hover:bg-transparent"
 	>
-		{#if params.tags}
+		{#if params.tags || params.search}
 			<div class="flex flex-row items-center justify-between gap-2">
-				{#each params.tags as tag}
-					<Badge>{tag}</Badge>
-				{/each}
+				{#if params.tags}
+					{#each params.tags as tag}
+						<Badge>{tag}</Badge>
+					{/each}
+				{/if}
+				{#if params.search}
+					<Badge>{params.search}</Badge>
+				{/if}
 			</div>
 		{/if}
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="20"
-			height="20"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="2"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-		>
-			<circle cx="10.5" cy="10.5" r="7.5" />
-			<line x1="16.5" y1="16.5" x2="21" y2="21" />
-		</svg>
+		<SearchIcon />
 	</Sheet.Trigger>
 	<Sheet.Content class="flex flex-col gap-4 rounded-lg border border-primary" side="right">
 		<div class="flex flex-row items-center justify-between gap-2">
-			<Input type="search" placeholder="Search" />
+			<Search />
 			<Sheet.Close
 				class="transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"
 			>

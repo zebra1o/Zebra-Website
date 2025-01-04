@@ -1,65 +1,58 @@
 <script lang="ts">
 	import slug from 'slug';
+	import { untrack } from 'svelte';
 	import { queryParameters, ssp } from 'sveltekit-search-params';
+
+	import type { About as AboutType, WorkMetadata, Global as GlobalType } from '$lib/types';
+	import { createWorksIndex, searchWorksByTags, searchWorksIndex } from '$lib/utils/search';
+	import { openModal, selectedWork } from '$lib/stores';
+
 	import Work from '$lib/components/Work.svelte';
 	import About from '$lib/components/About.svelte';
-	import { isLoading, openModal, selectedWork } from '$lib/stores';
-	import { onMount } from 'svelte';
-	import { cacheImages } from '$lib/utils/imageCache';
 	import ImageModal from '$lib/components/viewers/ImageModal.svelte';
-	import type { About as AboutType, WorkMetadata, Global as GlobalType } from '$lib/types';
 	import Nav from '$lib/components/Nav.svelte';
+	import Loader from '$lib/components/Loader.svelte';
 
 	let {
 		data
 	}: { data: { works: WorkMetadata[]; about: AboutType; tags: string[]; global: GlobalType } } =
 		$props();
 	let works = data.works;
-	let loadedImages = $state(0);
+
+	let searchIndexStatus: 'loading' | 'ready' = $state('loading');
 
 	const params = queryParameters({
 		art: true,
-		tags: ssp.array<string>()
+		tags: ssp.array<string>(),
+		search: true
 	});
+
+	let search = $derived(params.search);
+	let tags = $derived(params.tags);
 
 	let filteredWorks = $derived.by(() => {
-		if (!params.tags || params.tags.length === 0) return works;
-		return works.filter((work) => {
-			return params.tags?.some((tag) => work.tags?.find((t) => slug(t) === tag));
-		});
-	});
-
-	const totalImages = $derived(filteredWorks.length);
-
-	function handleImageLoaded() {
-		loadedImages++;
-		if (loadedImages === totalImages) {
-			setTimeout(() => {
-				$isLoading = false;
-			}, 500);
+		if (searchIndexStatus !== 'ready') return works;
+		if (search && search !== '') {
+			console.log('filter by search:', search);
+			return searchWorksIndex(search);
+		} else if (tags && tags.length > 0) {
+			console.log('filter by tags:', tags);
+			return searchWorksByTags(tags);
+		} else {
+			console.log('just unfiltered works');
+			return works;
 		}
-	}
-
-	onMount(() => {
-		if (totalImages === 0) {
-			$isLoading = false;
-			return;
-		}
-
-		if (params.art) {
-			$selectedWork = works.find((work) => slug(work.title) === params.art) ?? null;
-			$openModal = true;
-		}
-
-		// Just cache the images directly, no need for status check first
-		const imageUrls = works.map((work) => work.image);
-		cacheImages(imageUrls).catch(console.error);
 	});
 
 	$effect(() => {
-		if (params.tags && params.tags.length === 0) {
-			params.tags = null;
-		}
+		untrack(() => {
+			createWorksIndex(works);
+			searchIndexStatus = 'ready';
+			if (params.art) {
+				$selectedWork = works.find((work) => slug(work.title) === params.art) ?? null;
+				$openModal = true;
+			}
+		});
 	});
 </script>
 
@@ -72,25 +65,11 @@
 <Nav tags={data.tags} global={data.global} />
 <About data={data.about} />
 <ImageModal />
-
-{#if $isLoading}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black">
-		<div class="text-center text-white">
-			<div class="mb-4 text-2xl">Loading...</div>
-			<div class="h-1 w-48 rounded-full bg-gray-800">
-				<div
-					class="h-full rounded-full bg-white transition-all duration-300"
-					style="width: {(loadedImages / totalImages) * 100}%"
-				></div>
-			</div>
-		</div>
-	</div>
-{/if}
-
+<Loader works={filteredWorks} />
 <div class="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
-	<div class="overflow-container relative h-full w-full">
+	<div class="overflow-container h-full w-full">
 		{#each filteredWorks as work}
-			<Work {work} onLoaded={handleImageLoaded} />
+			<Work {work} />
 		{/each}
 	</div>
 </div>

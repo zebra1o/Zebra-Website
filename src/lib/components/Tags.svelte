@@ -16,11 +16,16 @@
 		} else {
 			selectedTags.push(slug(tag));
 		}
-		params.tags = selectedTags;
+		if (selectedTags.length === 0) {
+			params.tags = null;
+		} else {
+			params.tags = selectedTags;
+		}
 	}
 </script>
 
 <div class="flex flex-col">
+	<h3 class="border-b py-2 text-lg font-semibold">Tags</h3>
 	{#each tags as tag}
 		<Button
 			class="w-full justify-start rounded-none border-b p-6 text-lg font-medium aria-selected:bg-primary/50 aria-selected:text-black"

@@ -9,7 +9,7 @@
 
 	const params = queryParameters();
 
-	let { onLoaded, work } = $props<{ onLoaded: () => void; work: WorkMetadata }>();
+	let { work }: { work: WorkMetadata } = $props();
 
 	let cardElement: HTMLButtonElement | null = $state(null);
 	let draggableInstance: Draggable[] | null = $state(null);
@@ -57,7 +57,6 @@
 				await new Promise<void>((resolve) => {
 					const img = new Image();
 					img.onload = () => {
-						onLoaded();
 						resolve();
 					};
 					img.src = objectUrl;
@@ -73,18 +72,15 @@
 		return new Promise((resolve) => {
 			const img = new Image();
 			img.onload = () => {
-				onLoaded();
 				resolve();
 			};
 			img.src = src;
 		});
 	}
 
-	$effect(() => {
-		if (!cardElement) return;
-
-		// Use untrack for async operations
+	$effect.pre(() => {
 		untrack(async () => {
+			if (!cardElement) return;
 			await preloadImage(work.image);
 
 			const initialPos = getRandomPosition();
@@ -102,7 +98,6 @@
 			});
 		});
 
-		// Create draggable instance with improved click handling
 		draggableInstance = Draggable.create(cardElement, {
 			type: 'x,y',
 			bounds: '.overflow-container',

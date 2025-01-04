@@ -6,7 +6,7 @@
 {#if $selectedWork}
 	<div
 		id="info"
-		class="custom-zebra fixed inset-x-0 bottom-12 left-8 z-50 max-w-2xl border-collapse backdrop-blur-sm"
+		class="fixed inset-x-0 bottom-12 left-8 z-50 max-w-2xl border-collapse rounded-xl bg-black/20 backdrop-blur-sm"
 	>
 		<div
 			class="max-h-[60vh] overflow-y-auto px-4 py-6 text-white [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -36,15 +36,5 @@
 <style>
 	#info {
 		box-shadow: -15px 20px 50px 5px rgba(255, 255, 255, 0.35);
-	}
-	.custom-zebra {
-		border-radius: 18px;
-		padding: 3px;
-		background: rgba(0, 0, 0, 0.25);
-	}
-
-	.custom-zebra > div {
-		border-radius: 16px;
-		background: rgba(0, 0, 0, 0.25);
 	}
 </style>
