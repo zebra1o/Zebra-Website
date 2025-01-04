@@ -72,7 +72,7 @@ content:
         label: 'Model Format'
         type: select
         required: false
-        default: null
+        default: 'null'
         options:
           values:
             [
@@ -80,7 +80,7 @@ content:
               { value: gltf, label: '.gltf' },
               { value: splat, label: '.splat' },
               { value: ply, label: '.ply' },
-              { value: null, label: 'No Model'}
+              { value: 'null', label: 'No Model'}
             ]
       - name: model_file
         label: 'Model File'
