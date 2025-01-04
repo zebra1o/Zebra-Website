@@ -200,3 +200,7 @@ content:
         label: 'Logo'
         type: image
         required: false
+      - name: filter_bg
+        label: 'Filter Section Background'
+        type: image
+        required: false
