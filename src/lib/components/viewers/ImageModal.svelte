@@ -39,7 +39,9 @@
 		if (e.target === dialog) dialog?.close();
 	}}
 >
-	<div class="fixed right-8 top-8 z-[60] flex flex-col gap-2">
+	<div
+		class="fixed right-8 top-8 z-[60] flex w-[85vw] flex-row-reverse justify-between gap-2 sm:flex-col sm:justify-start"
+	>
 		<CustomButton ariaLabel="Close dialog" icon={X} onClick={() => dialog?.close()} />
 		<CustomButton
 			ariaLabel="Toggle info"

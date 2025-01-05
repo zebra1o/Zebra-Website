@@ -7,7 +7,7 @@
 {#if $selectedWork}
 	<div
 		id="info"
-		class="fixed inset-x-0 bottom-12 left-8 z-50 max-w-2xl border-collapse rounded-xl bg-black/20 backdrop-blur-sm"
+		class="fixed inset-x-0 bottom-5 z-50 mx-auto max-w-xs border-collapse rounded-xl bg-black/20 backdrop-blur-sm sm:bottom-12 sm:left-8 sm:max-w-2xl"
 	>
 		<div
 			class="max-h-[50vh] overflow-y-auto px-4 py-6 text-white [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"

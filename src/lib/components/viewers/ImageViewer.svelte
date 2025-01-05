@@ -56,7 +56,7 @@
 	}
 </script>
 
-<div class="fixed bottom-8 right-8 z-[60] flex flex-col items-center justify-center">
+<div class="fixed bottom-8 right-8 z-[60] hidden flex-col items-center justify-center sm:flex">
 	<CustomButton
 		ariaLabel="Zoom In"
 		iconClass="size-4"
@@ -76,13 +76,13 @@
 
 {#if $selectedWork}
 	<div class="mt-1 grid h-full max-h-[85vh] w-full max-w-[85vw] place-content-center">
-		<div bind:this={imageWheelContainer} class="h-full w-full transition-all duration-500">
+		<div bind:this={imageWheelContainer} class="h-[85vh] w-[85vw] transition-all duration-500">
 			<enhanced:img
 				fetchpriority="high"
 				loading="eager"
 				src={$selectedWork.image as string}
 				alt={$selectedWork.title}
-				class="h-full w-full cursor-grab object-contain active:cursor-grabbing"
+				class="h-full max-h-[85vh] w-full max-w-[85vw] cursor-grab object-contain active:cursor-grabbing"
 			/>
 		</div>
 	</div>
