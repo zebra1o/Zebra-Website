@@ -1,6 +1,6 @@
 ---
 title: Citrinitas
-image: /media/images/blackink07.webp
+image: /media/images/citrinitas21.webp
 year: "2021"
 description: <p>ink on paper, 25x35</p>
 tags:
