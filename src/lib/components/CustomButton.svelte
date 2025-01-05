@@ -21,7 +21,7 @@
 		props.buttonClass,
 		'rounded-full bg-transparent p-0 hover:bg-transparent focus:bg-transparent focus:!outline-none',
 		outline &&
-			'outline outline-[0.5px] outline-primary hover:!outline-primary focus:!outline focus:!outline-primary'
+			'outline outline-[0.5px] outline-primary hover:!outline-primary focus:!outline focus:!outline-[0.5px] focus:!outline-primary'
 	)}
 	onclick={props.onClick}
 	aria-label={props.ariaLabel}
