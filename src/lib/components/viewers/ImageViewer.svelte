@@ -80,7 +80,7 @@
 			<enhanced:img
 				fetchpriority="high"
 				loading="eager"
-				src={image as string}
+				src={$selectedWork.image as string}
 				alt={$selectedWork.title}
 				class="h-full w-full cursor-grab object-contain active:cursor-grabbing"
 			/>
