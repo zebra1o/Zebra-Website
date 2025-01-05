@@ -40,9 +40,14 @@
 	}}
 >
 	<div
-		class="fixed right-8 top-8 z-[60] flex w-[85vw] flex-row-reverse justify-between gap-2 sm:flex-col sm:justify-start"
+		class="fixed right-5 top-5 z-[60] flex w-[90vw] flex-row-reverse justify-between gap-2 sm:right-6 sm:w-min sm:flex-col sm:justify-start"
 	>
-		<CustomButton ariaLabel="Close dialog" icon={X} onClick={() => dialog?.close()} />
+		<CustomButton
+			ariaLabel="Close dialog"
+			outline={false}
+			icon={X}
+			onClick={() => dialog?.close()}
+		/>
 		<CustomButton
 			ariaLabel="Toggle info"
 			iconClass="size-4"
@@ -57,7 +62,7 @@
 			<!-- Content Container -->
 			<div class="flex items-center justify-center">
 				{#if $selectedWork.has_model && $selectedWork.model_format && $selectedWork.model_file}
-					<div class="h-[85vh] w-[85vw]">
+					<div class="h-screen w-screen sm:h-[95vh] sm:w-[95vw]">
 						<ModelViewer
 							format={$selectedWork.model_format as ModelFormat}
 							file={$selectedWork.model_file}

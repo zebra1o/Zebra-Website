@@ -10,7 +10,7 @@
 <Button
 	type="button"
 	size="icon"
-	class="fixed left-5 top-5 z-50 bg-transparent hover:bg-transparent"
+	class="fixed left-5 top-5 z-50 bg-transparent shadow-none hover:bg-transparent"
 	onclick={() => ($openAboutModal = true)}
 	aria-label="About"
 >

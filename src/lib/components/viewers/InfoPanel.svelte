@@ -7,16 +7,18 @@
 {#if $selectedWork}
 	<div
 		id="info"
-		class="fixed inset-x-0 bottom-5 z-50 mx-auto max-w-xs border-collapse rounded-xl bg-black/20 backdrop-blur-sm sm:bottom-12 sm:left-8 sm:max-w-2xl"
+		class="fixed inset-x-0 bottom-3 left-3 z-50 max-w-xs border-collapse rounded-xl bg-black/20 backdrop-blur-sm sm:bottom-8 sm:left-8 sm:max-w-2xl"
 	>
 		<div
-			class="max-h-[50vh] overflow-y-auto px-4 py-6 text-white [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+			class="max-h-[50vh] overflow-y-auto p-3 text-white [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-6 [&::-webkit-scrollbar]:hidden"
 		>
 			<div class="flex items-center justify-between gap-4">
 				<Tooltip.Provider>
 					<Tooltip.Root>
 						<Tooltip.Trigger>
-							<h3 class="font-jacquard text-5xl tracking-widest">{$selectedWork.title}</h3>
+							<h3 class="font-jacquard text-3xl tracking-widest sm:text-5xl">
+								{$selectedWork.title}
+							</h3>
 						</Tooltip.Trigger>
 						<Tooltip.Content>
 							{$selectedWork.title}

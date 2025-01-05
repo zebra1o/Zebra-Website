@@ -32,7 +32,7 @@
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <dialog
 	bind:this={dialog}
-	class="m-auto max-h-[90vh] w-full max-w-3xl overflow-clip rounded-xl border-none bg-black/95 p-8 text-white backdrop-blur-sm"
+	class="m-auto h-full w-full overflow-clip rounded-xl border-none bg-black/95 p-2 text-white backdrop-blur-sm sm:max-h-[90vh] sm:max-w-3xl sm:p-8"
 	onclose={handleDialogClose}
 	onclick={(e) => {
 		if (e.target === dialog) dialog?.close();
@@ -64,12 +64,12 @@
 					style="background-image: url({data.bg_image})"
 				></div>
 			{/if}
-			<div class="z-50 flex w-full flex-col items-start gap-8">
+			<div class="z-50 flex w-full flex-col items-start gap-2 sm:gap-8">
 				<h3 class="w-full text-center font-jacquard text-6xl">zebra</h3>
-				<div class="flex w-full flex-row items-center justify-between gap-16 px-2">
+				<div class="flex w-full flex-row items-center justify-between gap-4 sm:gap-16 sm:px-2">
 					{#each tabs as tab}
 						<Button
-							class="w-full rounded-full bg-transparent font-jaini text-2xl font-medium tracking-[0.25em] text-primary/30 hover:border-primary/30 hover:bg-transparent hover:text-primary aria-checked:border-primary aria-checked:text-primary"
+							class="w-full rounded-full bg-transparent px-2 font-jaini text-lg font-medium tracking-[0.25em] text-primary/30 hover:border-primary/30 hover:bg-transparent hover:text-primary aria-checked:border-primary aria-checked:text-primary sm:text-2xl"
 							size="lg"
 							variant="outline"
 							aria-checked={activeTab === tab}
