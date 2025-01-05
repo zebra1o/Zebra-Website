@@ -66,6 +66,10 @@
 	<meta property="og:title" content={data.global.title} />
 	<meta property="og:description" content={data.global.description} />
 	<meta property="og:image" content={data.global.logo} />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://zebrazebra.xyz" />
+	<meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+	<meta name="color-scheme" content="only dark" />
 </svelte:head>
 
 <Nav tags={data.tags} global={data.global} />
