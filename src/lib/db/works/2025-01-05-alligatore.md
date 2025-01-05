@@ -1,6 +1,6 @@
 ---
 title: Alligatore
-image: /media/images/blackink01.webp
+image: /media/images/alligatore.webp
 year: "2018"
 description: <p>ink on paper 21x29</p>
 tags:
