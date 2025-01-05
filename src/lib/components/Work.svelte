@@ -95,14 +95,20 @@
 
 <button
 	bind:this={cardElement}
-	class="absolute h-auto touch-none"
+	class="absolute h-auto touch-none opacity-0"
 	style="touch-action: none;"
 	aria-label={work.title}
 >
 	<div class="relative h-auto w-[150px] overflow-hidden sm:w-[300px]">
 		<enhanced:img
-			fetchpriority="low"
-			loading="lazy"
+			fetchpriority="high"
+			loading="eager"
+			onload={() => {
+				gsap.to(cardElement, {
+					opacity: 1,
+					duration: 0.5
+				});
+			}}
 			src={work.image as string}
 			alt={work.title}
 			class="h-full w-full object-contain"

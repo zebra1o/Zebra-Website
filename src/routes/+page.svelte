@@ -4,12 +4,7 @@
 	import { queryParameters, ssp } from 'sveltekit-search-params';
 
 	import type { About as AboutType, WorkMetadata, Global as GlobalType } from '$lib/types';
-	import {
-		createWorksIndex,
-		searchWorksIndex,
-		filterByTags,
-		searchInFilteredWorks
-	} from '$lib/utils/search';
+	import { createWorksIndex, filterByTags, searchInFilteredWorks } from '$lib/utils/search';
 	import { isLoading, openModal, selectedWork } from '$lib/stores';
 
 	import Work from '$lib/components/Work.svelte';
