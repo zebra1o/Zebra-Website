@@ -39,7 +39,8 @@
 		if (e.target === dialog) dialog?.close();
 	}}
 >
-	<div class="fixed right-8 top-8 z-[60] flex gap-2">
+	<div class="fixed right-8 top-8 z-[60] flex flex-col gap-2">
+		<CustomButton ariaLabel="Close dialog" icon={X} onClick={() => dialog?.close()} />
 		<CustomButton
 			ariaLabel="Toggle info"
 			iconClass="size-4"
@@ -47,8 +48,6 @@
 			outline={false}
 			onClick={() => (showInfo = !showInfo)}
 		/>
-
-		<CustomButton ariaLabel="Close dialog" icon={X} onClick={() => dialog?.close()} />
 	</div>
 
 	<div class="relative">

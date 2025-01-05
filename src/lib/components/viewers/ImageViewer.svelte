@@ -77,19 +77,13 @@
 {#if $selectedWork}
 	<div class="mt-1 grid h-full max-h-[85vh] w-full max-w-[85vw] place-content-center">
 		<div bind:this={imageWheelContainer} class="h-full w-full transition-all duration-500">
-			{#await $selectedWork.image}
-				<Loader />
-			{:then image}
-				<enhanced:img
-					fetchpriority="high"
-					loading="eager"
-					src={image as string}
-					alt={$selectedWork.title}
-					class="h-full w-full cursor-grab object-contain active:cursor-grabbing"
-				/>
-			{:catch error}
-				<div class="text-white">Error loading image, please try again later. {error}</div>
-			{/await}
+			<enhanced:img
+				fetchpriority="high"
+				loading="eager"
+				src={image as string}
+				alt={$selectedWork.title}
+				class="h-full w-full cursor-grab object-contain active:cursor-grabbing"
+			/>
 		</div>
 	</div>
 {/if}
