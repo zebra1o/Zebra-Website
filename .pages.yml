@@ -63,6 +63,7 @@ content:
               { value: illustration, label: 'Illustration' },
               { value: mixed_media, label: 'Mixed Media' },
               { value: gsplat, label: 'Gsplat' }
+              { value: gsplat, label: 'Ink' }
             ]
       - name: has_model
         label: '3D Model'
