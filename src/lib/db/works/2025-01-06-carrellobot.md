@@ -1,5 +1,5 @@
 ---
-title: carrellobot
+title: Carrellobot
 image: /media/images/carrellobot_sprite.webp
 year: "2023"
 tags:
