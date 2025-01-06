@@ -1,8 +1,7 @@
 {
-  "bio": "",
-  "email": "",
-  "location": "",
-  "avatar": "/media/global/pietra_logo.png",
-  "bg_image": "/media/global/circle_4k_trasp.png",
-  "social": []
+  "bio": "<p>zebra is</p>",
+  "email": "zebra.ze@outlook.com",
+  "location": "Bali",
+  "avatar": "/media/global/pietruzza_sprite_260x200.png",
+  "bg_image": "/media/global/circle_4k_trasp.png"
 }
