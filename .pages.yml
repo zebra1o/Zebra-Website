@@ -7,9 +7,9 @@ content:
     label: 'Works'
     type: collection
     view:
-      fields: [title, image, has_model]
+      fields: [title, has_model]
       primary: title
-      sort: [title, image, has_model]
+      sort: [title, has_model]
       default:
         search: ''
         sort: title
