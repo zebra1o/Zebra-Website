@@ -91,6 +91,7 @@ export interface Global {
 	description?: string;
 	logo?: string;
 	filter_bg?: string;
+	logo_3d?: string;
 	keywords?: string;
 }
 

@@ -74,7 +74,7 @@
 
 <Nav tags={data.tags} global={data.global} />
 <About data={data.about} />
-<ImageModal />
+<ImageModal logo_3d={data.global.logo_3d} />
 {#if $isLoading}
 	<Loader />
 {:else}

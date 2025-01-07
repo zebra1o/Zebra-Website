@@ -8,6 +8,7 @@
 	import InfoPanel from './InfoPanel.svelte';
 	import type { ModelFormat } from '$lib/types';
 
+	let { logo_3d }: { logo_3d?: string } = $props();
 	const params = queryParameters({
 		art: true
 	});
@@ -64,6 +65,7 @@
 				{#if $selectedWork.has_model && $selectedWork.model_format && $selectedWork.model_file}
 					<div class="h-screen w-screen sm:h-[95vh] sm:w-[95vw]">
 						<ModelViewer
+							{logo_3d}
 							format={$selectedWork.model_format as ModelFormat}
 							file={$selectedWork.model_file}
 							className="h-full w-full"
