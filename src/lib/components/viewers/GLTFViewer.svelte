@@ -1,18 +1,30 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import * as THREE from 'three';
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 	import type { ViewerProps } from '$lib/types';
 	import Loader from '../Loader.svelte';
+	import { PressedKeys } from 'runed';
+	import { useEventListener } from 'runed';
 
 	const props: ViewerProps = $props();
+	const keys = new PressedKeys();
+	const isLightControlActive = $derived(keys.has('l'));
 	const state = $state({
 		loading: false,
 		error: null as string | null,
 		isVisible: true,
-		renderer: null as THREE.WebGLRenderer | null
+		renderer: null as THREE.WebGLRenderer | null,
+		lightGroup: null as THREE.Group | null,
+		lights: null as {
+			key: THREE.DirectionalLight;
+			fill: THREE.DirectionalLight;
+			rim: THREE.DirectionalLight;
+		} | null,
+		lightHelpers: [] as THREE.DirectionalLightHelper[],
+		lightRadius: 5 // Distance from center
 	});
 
 	let container: HTMLDivElement;
@@ -20,6 +32,34 @@
 	let scene: THREE.Scene;
 	let camera: THREE.PerspectiveCamera;
 	let controls: OrbitControls;
+
+	function setupLights() {
+		const lightGroup = new THREE.Group();
+
+		const lights = {
+			key: new THREE.DirectionalLight(0xffffff, 1.5),
+			fill: new THREE.DirectionalLight(0xffffff, 0.75),
+			rim: new THREE.DirectionalLight(0xffffff, 1.0)
+		};
+
+		// Position lights relative to each other
+		lights.key.position.set(0, 5, 5);
+		lights.fill.position.set(-5, 0, 5);
+		lights.rim.position.set(5, 0, -5);
+
+		// Add lights and their targets to group
+		Object.values(lights).forEach((light) => {
+			lightGroup.add(light);
+			lightGroup.add(light.target);
+			// Create helper but don't add to scene yet
+			const helper = new THREE.DirectionalLightHelper(light, 1);
+			state.lightHelpers.push(helper);
+		});
+
+		state.lightGroup = lightGroup;
+		state.lights = lights;
+		scene.add(lightGroup);
+	}
 
 	function initScene() {
 		scene = new THREE.Scene();
@@ -33,9 +73,9 @@
 		);
 		camera.position.set(0, 0, 5);
 
-		// Balanced renderer settings
+		// Setup renderer
 		const renderer = new THREE.WebGLRenderer({
-			antialias: window.devicePixelRatio < 2, // Enable only for non-high-DPI displays
+			antialias: window.devicePixelRatio < 2,
 			alpha: true,
 			powerPreference: 'low-power',
 			precision: 'mediump',
@@ -49,23 +89,15 @@
 		renderer.outputColorSpace = THREE.SRGBColorSpace;
 		renderer.toneMapping = THREE.ReinhardToneMapping;
 		renderer.toneMappingExposure = 1.2;
-		renderer.shadowMap.enabled = false;
+		renderer.shadowMap.enabled = true; // Enable shadows
 		container.appendChild(renderer.domElement);
 
-		// Enhanced lighting for better material showcase
-		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
-		hemiLight.position.set(0, 20, 0);
-		scene.add(hemiLight);
+		state.renderer = renderer;
 
-		const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-		dirLight.position.set(3, 10, 10);
-		dirLight.castShadow = false;
-		scene.add(dirLight);
+		// Setup lights
+		setupLights();
 
-		const backLight = new THREE.DirectionalLight(0xffffff, 1);
-		backLight.position.set(-3, 10, -10);
-		scene.add(backLight);
-
+		// Setup controls
 		controls = new OrbitControls(camera, renderer.domElement);
 		controls.enableDamping = true;
 		controls.dampingFactor = 0.05;
@@ -79,12 +111,7 @@
 		controls.minDistance = 1;
 		controls.enablePan = true;
 		controls.screenSpacePanning = true;
-		controls.autoRotate = false;
-		controls.autoRotateSpeed = 2.0;
 		controls.target.set(0, 0, 0);
-
-		state.renderer = renderer;
-		return { scene, camera, renderer, controls };
 	}
 
 	async function loadGLTF(url: string) {
@@ -212,9 +239,40 @@
 
 		if (state.isVisible) {
 			controls.update();
+			// Update light helpers
+			if (isLightControlActive) {
+				state.lightHelpers.forEach((helper) => helper.update());
+			}
 			state.renderer.render(scene, camera);
 		}
 	}
+
+	// Handle light group movement
+	useEventListener(window, 'mousemove', (e: MouseEvent) => {
+		if (!isLightControlActive || !state.lightGroup) return;
+
+		const rect = container.getBoundingClientRect();
+		const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+		const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+		// Rotate entire light group
+		const theta = x * Math.PI;
+		const phi = (y * Math.PI) / 2;
+
+		state.lightGroup.rotation.y = theta;
+		state.lightGroup.rotation.x = phi;
+	});
+
+	// Toggle light helpers based on control state
+	$effect(() => {
+		if (!scene) return;
+
+		if (isLightControlActive) {
+			state.lightHelpers.forEach((helper) => scene.add(helper));
+		} else {
+			state.lightHelpers.forEach((helper) => scene.remove(helper));
+		}
+	});
 
 	onMount(() => {
 		if (!props.modelUrl) return;
@@ -264,6 +322,17 @@
 			timeout = setTimeout(() => fn(), wait);
 		};
 	}
+
+	onDestroy(() => {
+		state.lightHelpers.forEach((helper) => {
+			scene.remove(helper);
+			helper.dispose();
+		});
+
+		if (state.lightGroup) {
+			scene.remove(state.lightGroup);
+		}
+	});
 </script>
 
 <div class="relative h-full w-full" bind:this={container}>
