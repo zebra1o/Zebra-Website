@@ -214,7 +214,7 @@ content:
         label: 'Filter Section Background'
         type: image
         required: false
-      - name: 3d_logo
+      - name: logo_3d
         label: '3D Info Logo'
         type: image
         required: false
