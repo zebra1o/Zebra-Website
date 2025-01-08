@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { gsap, Draggable } from '$lib/gsap.config';
-	import { untrack } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import type { WorkMetadata } from '$lib/types';
 	import { selectedWork, openModal } from '$lib/stores';
 	import { queryParameters } from 'sveltekit-search-params';
@@ -62,7 +62,7 @@
 			bounds: '.overflow-container',
 			cursor: 'grab',
 			activeCursor: 'grabbing',
-			minimumMovement: 2,
+			minimumMovement: 1,
 			onClick: function () {
 				params.art = slug(work.title);
 				$selectedWork = work;
@@ -86,10 +86,18 @@
 
 		return () => {
 			window.removeEventListener('resize', handleResize);
-			if (draggableInstance?.[0]) {
-				draggableInstance[0].kill();
+			if (draggableInstance) {
+				draggableInstance.forEach((instance) => {
+					instance.kill();
+				});
 			}
+			draggableInstance = null;
 		};
+	});
+
+	onDestroy(() => {
+		cardElement = null;
+		draggableInstance = null;
 	});
 </script>
 
