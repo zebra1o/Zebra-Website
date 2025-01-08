@@ -1,4 +1,5 @@
-import { writable, type Writable } from 'svelte/store';
+import { writable } from 'svelte/store';
+import type { MaterialPreset } from './quality-presets';
 
 export interface LightSettings {
 	color: string;
@@ -11,6 +12,8 @@ export interface LightSettings {
 	};
 }
 
+export type QualityPreset = 'low' | 'default' | 'high';
+
 export interface ViewerSettings {
 	visible: boolean;
 	lights: {
@@ -19,39 +22,47 @@ export interface ViewerSettings {
 		rim: LightSettings;
 	};
 	global: {
-		groupDistance: number;
 		centerDistance: number;
 		bloom: boolean;
 		showHelpers: boolean;
+		lightIntensity: number;
+		shadows: boolean;
+		qualityPreset: QualityPreset;
+		materialPreset: MaterialPreset;
 	};
 }
 
-export const viewerSettings: Writable<ViewerSettings> = writable({
+export const defaultSettings: ViewerSettings = {
 	visible: false,
 	lights: {
 		key: {
 			color: '#ffffff',
-			intensity: 1,
-			distance: 5,
-			position: { x: 5, y: 5, z: 5 }
+			intensity: 50.0,
+			distance: 15,
+			position: { x: 1, y: 1.5, z: 1 }
 		},
 		fill: {
 			color: '#ffffff',
-			intensity: 0.5,
-			distance: 5,
-			position: { x: -5, y: 0, z: -5 }
+			intensity: 25.0,
+			distance: 15,
+			position: { x: -1.5, y: 0.5, z: -1.5 }
 		},
 		rim: {
 			color: '#ffffff',
-			intensity: 0.3,
-			distance: 5,
-			position: { x: 0, y: 5, z: -5 }
+			intensity: 15.0,
+			distance: 15,
+			position: { x: 0, y: 2, z: -1.5 }
 		}
 	},
 	global: {
-		groupDistance: 10,
 		centerDistance: 5,
 		bloom: false,
-		showHelpers: false
+		showHelpers: false,
+		lightIntensity: 1.0,
+		shadows: true,
+		qualityPreset: 'default',
+		materialPreset: 'default'
 	}
-});
+};
+
+export const viewerSettings = writable<ViewerSettings>(structuredClone(defaultSettings));

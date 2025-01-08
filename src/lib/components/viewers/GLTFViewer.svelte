@@ -4,7 +4,12 @@
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+	import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+	import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 	import type { ViewerProps } from '$lib/types';
+	import { viewerSettings } from '$lib/stores/viewer-settings';
+	import { materialPresets, qualityPresets } from '$lib/stores/quality-presets';
 	import Loader from '../Loader.svelte';
 	import { PressedKeys } from 'runed';
 	import { useEventListener } from 'runed';
@@ -17,14 +22,16 @@
 		error: null as string | null,
 		isVisible: true,
 		renderer: null as THREE.WebGLRenderer | null,
+		composer: null as EffectComposer | null,
+		bloomPass: null as UnrealBloomPass | null,
 		lightGroup: null as THREE.Group | null,
 		lights: null as {
-			key: THREE.DirectionalLight;
-			fill: THREE.DirectionalLight;
-			rim: THREE.DirectionalLight;
+			key: THREE.PointLight;
+			fill: THREE.PointLight;
+			rim: THREE.PointLight;
 		} | null,
-		lightHelpers: [] as THREE.DirectionalLightHelper[],
-		lightRadius: 5 // Distance from center
+		lightHelpers: [] as THREE.PointLightHelper[],
+		lightRadius: 5
 	});
 
 	let container: HTMLDivElement;
@@ -34,31 +41,166 @@
 	let controls: OrbitControls;
 
 	function setupLights() {
+		const currentQuality = qualityPresets[$viewerSettings.global.qualityPreset];
 		const lightGroup = new THREE.Group();
 
 		const lights = {
-			key: new THREE.DirectionalLight(0xffffff, 1.5),
-			fill: new THREE.DirectionalLight(0xffffff, 0.75),
-			rim: new THREE.DirectionalLight(0xffffff, 1.0)
+			key: new THREE.PointLight(
+				$viewerSettings.lights.key.color,
+				$viewerSettings.lights.key.intensity * $viewerSettings.global.lightIntensity,
+				$viewerSettings.lights.key.distance * 5,
+				1.0
+			),
+			fill: new THREE.PointLight(
+				$viewerSettings.lights.fill.color,
+				$viewerSettings.lights.fill.intensity * $viewerSettings.global.lightIntensity,
+				$viewerSettings.lights.fill.distance * 5,
+				1.0
+			),
+			rim: new THREE.PointLight(
+				$viewerSettings.lights.rim.color,
+				$viewerSettings.lights.rim.intensity * $viewerSettings.global.lightIntensity,
+				$viewerSettings.lights.rim.distance * 5,
+				1.0
+			)
 		};
 
-		// Position lights relative to each other
-		lights.key.position.set(0, 5, 5);
-		lights.fill.position.set(-5, 0, 5);
-		lights.rim.position.set(5, 0, -5);
+		// Position lights based on settings
+		Object.entries(lights).forEach(([type, light], index) => {
+			// Skip rim light in low quality mode
+			if (currentQuality.lights.maxLights === 2 && type === 'rim') {
+				return;
+			}
 
-		// Add lights and their targets to group
-		Object.values(lights).forEach((light) => {
+			const settings = $viewerSettings.lights[type as keyof typeof $viewerSettings.lights];
+
+			// Apply quality-specific shadow settings
+			light.castShadow = $viewerSettings.global.shadows && currentQuality.meshes.castShadow;
+			if (light.castShadow) {
+				light.shadow.bias = currentQuality.lights.shadowBias;
+				light.shadow.radius = currentQuality.lights.shadowRadius;
+				light.shadow.mapSize.width = currentQuality.renderer.shadowMap.mapSize;
+				light.shadow.mapSize.height = currentQuality.renderer.shadowMap.mapSize;
+			}
+
+			const pos = new THREE.Vector3(
+				settings.position.x,
+				settings.position.y,
+				settings.position.z
+			).normalize();
+
+			light.position.copy(
+				pos.multiplyScalar(settings.distance * $viewerSettings.global.centerDistance * 0.5)
+			);
+
 			lightGroup.add(light);
-			lightGroup.add(light.target);
-			// Create helper but don't add to scene yet
-			const helper = new THREE.DirectionalLightHelper(light, 1);
+			const helper = new THREE.PointLightHelper(light, 0.5);
+			helper.visible = $viewerSettings.global.showHelpers;
 			state.lightHelpers.push(helper);
+			scene.add(helper);
 		});
 
 		state.lightGroup = lightGroup;
 		state.lights = lights;
 		scene.add(lightGroup);
+	}
+
+	// Update light settings when store changes
+	$effect(() => {
+		if (!state.lights) return;
+
+		const { lights: storeLights, global } = $viewerSettings;
+
+		// Update light properties
+		Object.entries(state.lights).forEach(([type, light]) => {
+			const settings = storeLights[type as keyof typeof storeLights];
+
+			// Update intensity with global multiplier
+			light.intensity = settings.intensity * global.lightIntensity;
+			light.color.set(settings.color);
+			(light as THREE.PointLight).distance = settings.distance * 5;
+
+			// Update shadow settings
+			light.castShadow = global.shadows;
+			if (light.castShadow) {
+				light.shadow.bias = -0.001;
+				light.shadow.mapSize.width = 512;
+				light.shadow.mapSize.height = 512;
+			}
+
+			// Apply individual light settings
+			const pos = new THREE.Vector3(
+				settings.position.x,
+				settings.position.y,
+				settings.position.z
+			).normalize();
+
+			// Set light position based on direction and distance, scaled by center distance
+			light.position.copy(pos.multiplyScalar(settings.distance * global.centerDistance * 0.5));
+		});
+
+		// Update helpers
+		state.lightHelpers.forEach((helper) => {
+			helper.visible = global.showHelpers;
+			helper.update();
+		});
+	});
+
+	function initPostProcessing() {
+		if (!state.renderer || !container) return;
+
+		const currentQuality = qualityPresets[$viewerSettings.global.qualityPreset];
+
+		// Only initialize if post-processing is enabled for current quality preset
+		if (!currentQuality.postProcessing.enabled) {
+			state.composer = null;
+			state.bloomPass = null;
+			return;
+		}
+
+		// Ensure we have valid dimensions
+		const width = Math.max(1, container.clientWidth);
+		const height = Math.max(1, container.clientHeight);
+		const pixelRatio = currentQuality.renderer.pixelRatio;
+
+		// Create render target with proper settings
+		const renderTarget = new THREE.WebGLRenderTarget(
+			Math.floor(width * pixelRatio),
+			Math.floor(height * pixelRatio),
+			{
+				type: THREE.HalfFloatType,
+				format: THREE.RGBAFormat,
+				minFilter: THREE.LinearFilter,
+				magFilter: THREE.LinearFilter,
+				stencilBuffer: false,
+				depthBuffer: true,
+				samples: currentQuality.postProcessing.samples
+			}
+		);
+
+		// Setup composer with render target
+		const composer = new EffectComposer(state.renderer, renderTarget);
+		composer.setSize(width, height);
+		composer.setPixelRatio(pixelRatio);
+
+		// Add render pass
+		const renderPass = new RenderPass(scene, camera);
+		composer.addPass(renderPass);
+
+		// Add bloom pass with quality-specific parameters
+		if (currentQuality.postProcessing.bloom) {
+			const bloomPass = new UnrealBloomPass(
+				new THREE.Vector2(width, height),
+				currentQuality.postProcessing.bloom.strength,
+				currentQuality.postProcessing.bloom.radius,
+				currentQuality.postProcessing.bloom.threshold
+			);
+			bloomPass.enabled = $viewerSettings.global.bloom;
+			composer.addPass(bloomPass);
+			state.bloomPass = bloomPass;
+		}
+
+		state.composer = composer;
 	}
 
 	function initScene() {
@@ -73,29 +215,35 @@
 		);
 		camera.position.set(0, 0, 5);
 
-		// Setup renderer
+		const currentQuality = qualityPresets[$viewerSettings.global.qualityPreset];
+
+		// Setup renderer with quality settings
 		const renderer = new THREE.WebGLRenderer({
-			antialias: window.devicePixelRatio < 2,
+			antialias: currentQuality.renderer.antialias,
 			alpha: true,
-			powerPreference: 'low-power',
-			precision: 'mediump',
+			powerPreference: currentQuality.renderer.powerPreference,
+			precision: currentQuality.renderer.precision,
 			stencil: false,
 			depth: true,
 			failIfMajorPerformanceCaveat: true
 		});
 
 		renderer.setSize(container.clientWidth, container.clientHeight);
-		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		renderer.setPixelRatio(currentQuality.renderer.pixelRatio);
 		renderer.outputColorSpace = THREE.SRGBColorSpace;
-		renderer.toneMapping = THREE.ReinhardToneMapping;
-		renderer.toneMappingExposure = 1.2;
-		renderer.shadowMap.enabled = true; // Enable shadows
+		renderer.toneMapping = THREE.ACESFilmicToneMapping;
+		renderer.toneMappingExposure = 1.5;
+		renderer.shadowMap.enabled = $viewerSettings.global.shadows;
+		renderer.shadowMap.type = currentQuality.renderer.shadowMap.type;
 		container.appendChild(renderer.domElement);
 
 		state.renderer = renderer;
 
-		// Setup lights
+		// Setup lights first (needed for post-processing)
 		setupLights();
+
+		// Setup post-processing
+		initPostProcessing();
 
 		// Setup controls
 		controls = new OrbitControls(camera, renderer.domElement);
@@ -130,6 +278,8 @@
 			gltf.scene.traverse((node) => {
 				if (node instanceof THREE.Mesh) {
 					node.frustumCulled = true;
+					node.castShadow = $viewerSettings.global.shadows;
+					node.receiveShadow = $viewerSettings.global.shadows;
 
 					if (node.geometry) {
 						node.geometry.computeBoundingSphere();
@@ -149,14 +299,25 @@
 			const box = new THREE.Box3().setFromObject(gltf.scene);
 			const center = box.getCenter(new THREE.Vector3());
 			const size = box.getSize(new THREE.Vector3());
+			const maxDim = Math.max(size.x, size.y, size.z);
 
+			// Center the model
 			gltf.scene.position.sub(center);
-			const scale = 2 / Math.max(size.x, size.y, size.z);
+
+			// Scale model to a larger size (8 units)
+			const scale = 8 / maxDim;
 			gltf.scene.scale.multiplyScalar(scale);
 
 			scene.add(gltf.scene);
 
+			// Set initial camera position based on model size
+			const initialDistance = maxDim * scale * 1.5;
+			camera.position.set(initialDistance, initialDistance * 0.8, initialDistance);
 			controls.target.set(0, 0, 0);
+
+			// Set control limits based on model size
+			controls.maxDistance = initialDistance * 3;
+			controls.minDistance = initialDistance * 0.2;
 			controls.update();
 		} catch (error) {
 			state.error = error instanceof Error ? error.message : 'Failed to load model';
@@ -239,11 +400,18 @@
 
 		if (state.isVisible) {
 			controls.update();
+
 			// Update light helpers
-			if (isLightControlActive) {
+			if (isLightControlActive || $viewerSettings.global.showHelpers) {
 				state.lightHelpers.forEach((helper) => helper.update());
 			}
-			state.renderer.render(scene, camera);
+
+			// Use composer for rendering if bloom is enabled
+			if (state.composer && $viewerSettings.global.bloom) {
+				state.composer.render();
+			} else {
+				state.renderer.render(scene, camera);
+			}
 		}
 	}
 
@@ -274,7 +442,60 @@
 		}
 	});
 
+	// Update post-processing settings when store changes
+	$effect(() => {
+		if (!state.bloomPass) return;
+		state.bloomPass.enabled = $viewerSettings.global.bloom;
+	});
+
+	// Update shadow settings when shadow toggle changes
+	$effect(() => {
+		if (!state.renderer || !scene) return;
+
+		state.renderer.shadowMap.enabled = $viewerSettings.global.shadows;
+
+		// Update all meshes in the scene
+		scene.traverse((node) => {
+			if (node instanceof THREE.Mesh) {
+				node.castShadow = $viewerSettings.global.shadows;
+				node.receiveShadow = $viewerSettings.global.shadows;
+			}
+		});
+
+		// Update all lights
+		if (state.lights) {
+			Object.values(state.lights).forEach((light) => {
+				light.castShadow = $viewerSettings.global.shadows;
+			});
+		}
+	});
+
+	// Handle resize
+	function handleResize() {
+		if (!state.renderer || !container) return;
+
+		const width = Math.max(1, container.clientWidth);
+		const height = Math.max(1, container.clientHeight);
+
+		// Update camera
+		camera.aspect = width / height;
+		camera.updateProjectionMatrix();
+
+		// Update renderer
+		state.renderer.setSize(width, height);
+		state.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+		// Update composer and passes
+		if (state.composer) {
+			state.composer.setSize(width, height);
+			if (state.bloomPass) {
+				state.bloomPass.resolution.set(width, height);
+			}
+		}
+	}
+
 	onMount(() => {
+		$viewerSettings.visible = false;
 		if (!props.modelUrl) return;
 
 		initScene();
@@ -292,18 +513,11 @@
 		observer.observe(container);
 		animate();
 
-		const resizeObserver = new ResizeObserver(
-			debounce(() => {
-				if (!container || !state.renderer || !camera) return;
-
-				const width = container.clientWidth;
-				const height = container.clientHeight;
-
-				camera.aspect = width / height;
-				camera.updateProjectionMatrix();
-				state.renderer.setSize(width, height);
-			}, 250)
-		);
+		// Use ResizeObserver instead of debounced function
+		const resizeObserver = new ResizeObserver(() => {
+			if (!container || !state.renderer || !camera) return;
+			handleResize();
+		});
 
 		resizeObserver.observe(container);
 
@@ -332,6 +546,81 @@
 		if (state.lightGroup) {
 			scene.remove(state.lightGroup);
 		}
+	});
+
+	// Add quality preset change effect
+	$effect(() => {
+		if (!state.renderer || !scene) return;
+
+		const currentQuality = qualityPresets[$viewerSettings.global.qualityPreset];
+
+		// Update renderer settings
+		state.renderer.setPixelRatio(currentQuality.renderer.pixelRatio);
+		if (state.renderer.shadowMap.type !== currentQuality.renderer.shadowMap.type) {
+			state.renderer.shadowMap.type = currentQuality.renderer.shadowMap.type;
+			state.renderer.shadowMap.needsUpdate = true;
+		}
+
+		// Update post-processing
+		initPostProcessing();
+
+		// Update all meshes in the scene
+		scene.traverse((node) => {
+			if (node instanceof THREE.Mesh) {
+				node.castShadow = $viewerSettings.global.shadows && currentQuality.meshes.castShadow;
+				node.receiveShadow = $viewerSettings.global.shadows && currentQuality.meshes.receiveShadow;
+				node.frustumCulled = currentQuality.meshes.frustumCulled;
+			}
+		});
+
+		// Update lights
+		if (state.lights) {
+			Object.entries(state.lights).forEach(([type, light], index) => {
+				// Handle rim light visibility in low quality mode
+				if (currentQuality.lights.maxLights === 2 && type === 'rim') {
+					light.intensity = 0;
+					return;
+				}
+
+				if (light.castShadow) {
+					light.shadow.bias = currentQuality.lights.shadowBias;
+					light.shadow.radius = currentQuality.lights.shadowRadius;
+					light.shadow.mapSize.width = currentQuality.renderer.shadowMap.mapSize;
+					light.shadow.mapSize.height = currentQuality.renderer.shadowMap.mapSize;
+					light.shadow.needsUpdate = true;
+				}
+			});
+		}
+	});
+
+	// Update materials when material preset changes
+	$effect(() => {
+		if (!scene) return;
+
+		const preset = materialPresets[$viewerSettings.global.materialPreset];
+		scene.traverse((node) => {
+			if (node instanceof THREE.Mesh) {
+				if (Array.isArray(node.material)) {
+					node.material.forEach((mat) => {
+						if (mat instanceof THREE.MeshStandardMaterial) {
+							mat.roughness = preset.roughness;
+							mat.metalness = preset.metalness;
+							mat.envMapIntensity = preset.envMapIntensity;
+							if ('transparent' in preset) mat.transparent = preset.transparent;
+							if ('opacity' in preset) mat.opacity = preset.opacity;
+							mat.needsUpdate = true;
+						}
+					});
+				} else if (node.material instanceof THREE.MeshStandardMaterial) {
+					node.material.roughness = preset.roughness;
+					node.material.metalness = preset.metalness;
+					node.material.envMapIntensity = preset.envMapIntensity;
+					if ('transparent' in preset) node.material.transparent = preset.transparent;
+					if ('opacity' in preset) node.material.opacity = preset.opacity;
+					node.material.needsUpdate = true;
+				}
+			}
+		});
 	});
 </script>
 
