@@ -4,7 +4,8 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import Tags from './Tags.svelte';
 	import Search from './Search.svelte';
-	import { SearchIcon, X } from 'lucide-svelte';
+	import SearchIcon from 'lucide-svelte/icons/search';
+	import X from 'lucide-svelte/icons/x';
 
 	let { tags, bg_image }: { tags: string[]; bg_image?: string } = $props();
 

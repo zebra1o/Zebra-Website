@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { openModal, selectedWork } from '$lib/stores';
-	import { X, EllipsisVertical } from 'lucide-svelte';
+	import X from 'lucide-svelte/icons/x';
+	import EllipsisVertical from 'lucide-svelte/icons/ellipsis-vertical';
+
 	import ModelViewer from './ModelViewer.svelte';
 	import { queryParameters } from 'sveltekit-search-params';
 	import CustomButton from '../CustomButton.svelte';

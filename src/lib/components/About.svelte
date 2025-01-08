@@ -3,7 +3,7 @@
 	import { openAboutModal } from '$lib/stores';
 	import Button from './ui/button/button.svelte';
 	import CustomButton from './CustomButton.svelte';
-	import { X } from 'lucide-svelte';
+	import X from 'lucide-svelte/icons/x';
 	import { ScrollArea } from './ui/scroll-area';
 
 	let { data }: { data: About } = $props();

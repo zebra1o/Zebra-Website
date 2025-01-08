@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Plus, Minus } from 'lucide-svelte';
+	import Plus from 'lucide-svelte/icons/plus';
+	import Minus from 'lucide-svelte/icons/minus';
 	import CustomButton from '../CustomButton.svelte';
 	import { Separator } from '../ui/separator';
 	import { selectedWork } from '$lib/stores';

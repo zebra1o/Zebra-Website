@@ -20,7 +20,9 @@
 	import { Switch } from '$lib/components/ui/switch';
 	import { Button } from '../ui/button';
 	import { ScrollArea } from '../ui/scroll-area';
-	import { RotateCcw, Link2, Link2Off } from 'lucide-svelte';
+	import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+	import Link2 from 'lucide-svelte/icons/link-2';
+	import Link2Off from 'lucide-svelte/icons/link-2-off';
 	import { onDestroy } from 'svelte';
 	import { QualityPreset } from '../ui/quality-preset';
 	import {
