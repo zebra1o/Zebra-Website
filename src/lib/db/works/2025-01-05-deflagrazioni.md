@@ -1,6 +1,6 @@
 ---
 title: Deflagrazioni
-image: /media/images/deflagrazioni21.webp
+image: /media/images/etching3.webp
 year: "2021"
 description: <p>pastels, pen, oilbars on paper, 14x21</p>
 tags:
