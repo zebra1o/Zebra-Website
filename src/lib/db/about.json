@@ -3,5 +3,11 @@
   "email": "zebra.ze@outlook.com",
   "location": "Bali",
   "avatar": "/media/global/pietruzza_sprite_260x200.png",
-  "bg_image": "/media/global/circle_4k_trasp.png"
+  "bg_image": "/media/global/circle_4k_trasp.png",
+  "social": [
+    {
+      "platform": "Behance",
+      "url": "https://www.behance.net/ze_bra"
+    }
+  ]
 }
