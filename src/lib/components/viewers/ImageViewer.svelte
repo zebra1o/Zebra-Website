@@ -1,8 +1,4 @@
 <script lang="ts">
-	import Plus from 'lucide-svelte/icons/plus';
-	import Minus from 'lucide-svelte/icons/minus';
-	import CustomButton from '../CustomButton.svelte';
-	import { Separator } from '../ui/separator';
 	import { selectedWork } from '$lib/stores';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
@@ -29,7 +25,6 @@
 
 		cleanup = () => {
 			unsubscribe();
-			// Add any additional cleanup if needed
 		};
 
 		return cleanup;
@@ -38,41 +33,7 @@
 	onDestroy(() => {
 		if (cleanup) cleanup();
 	});
-
-	function zoomIn() {
-		if (zoomImageInstance && zoomState.currentZoom < 4) {
-			zoomImageInstance.setZoomImageState({
-				currentZoom: zoomState.currentZoom + 0.5
-			});
-		}
-	}
-
-	function zoomOut() {
-		if (zoomImageInstance && zoomState.currentZoom > 1) {
-			zoomImageInstance.setZoomImageState({
-				currentZoom: zoomState.currentZoom - 0.5
-			});
-		}
-	}
 </script>
-
-<div class="fixed bottom-8 right-8 z-[60] hidden flex-col items-center justify-center sm:flex">
-	<CustomButton
-		ariaLabel="Zoom In"
-		iconClass="size-4"
-		icon={Plus}
-		onClick={zoomIn}
-		disabled={zoomState.currentZoom >= 4}
-	/>
-	<Separator orientation="vertical" class="h-[40px] w-[0.5px] bg-primary" />
-	<CustomButton
-		ariaLabel="Zoom Out"
-		iconClass="size-4"
-		icon={Minus}
-		onClick={zoomOut}
-		disabled={zoomState.currentZoom <= 1}
-	/>
-</div>
 
 {#if $selectedWork}
 	<div class="mt-1 grid h-full w-full place-content-center sm:max-h-[85vh] sm:max-w-[85vw]">
