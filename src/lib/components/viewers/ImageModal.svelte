@@ -47,13 +47,13 @@
 	>
 		<CustomButton
 			ariaLabel="Close dialog"
+			iconClass="size-9"
 			outline={false}
 			icon={X}
 			onClick={() => dialog?.close()}
 		/>
 		<CustomButton
 			ariaLabel="Toggle info"
-			iconClass="size-4"
 			icon={EllipsisVertical}
 			outline={false}
 			onClick={() => (showInfo = !showInfo)}
