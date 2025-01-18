@@ -40,8 +40,9 @@
 >
 	<CustomButton
 		buttonClass="absolute right-4 top-4"
-		outline={false}
+		iconClass="size-9 stroke-[1.5px]"
 		icon={X}
+		outline={false}
 		onClick={() => dialog?.close()}
 	/>
 	<div class="flex flex-col items-center gap-6">
@@ -60,16 +61,16 @@
 			<!-- Background image -->
 			{#if data.bg_image}
 				<div
-					class="absolute inset-0 z-0 h-full min-h-96 scale-125 bg-contain bg-center bg-no-repeat"
+					class="absolute inset-0 z-0 h-[500px] scale-125 bg-contain bg-center bg-no-repeat bg-origin-content"
 					style="background-image: url({data.bg_image})"
 				></div>
 			{/if}
-			<div class="z-50 flex w-full flex-col items-start gap-2 sm:gap-8">
+			<div class="z-50 flex min-h-[600px] w-full flex-col items-start gap-2 sm:gap-8">
 				<h3 class="w-full text-center font-jacquard text-6xl">zebra</h3>
 				<div class="flex w-full flex-row items-center justify-between gap-4 sm:gap-16 sm:px-2">
 					{#each tabs as tab}
 						<Button
-							class="w-full rounded-full bg-transparent px-2 font-jaini text-lg font-medium tracking-[0.25em] text-primary/30 hover:border-primary/30 hover:bg-transparent hover:text-primary aria-checked:border-primary aria-checked:text-primary sm:text-2xl"
+							class="w-full rounded-full bg-transparent px-2 font-jaini text-lg font-medium tracking-widest text-primary/30 hover:border-primary/30 hover:bg-transparent hover:text-primary aria-checked:border-primary aria-checked:text-primary sm:text-2xl sm:tracking-[0.25em]"
 							size="lg"
 							variant="outline"
 							aria-checked={activeTab === tab}
@@ -80,8 +81,8 @@
 					{/each}
 				</div>
 
-				<div class="mb-6 flex w-full items-center justify-center">
-					<ScrollArea class="max-h-64 overflow-y-auto">
+				<div class="flex w-full items-center justify-center">
+					<ScrollArea class="max-h-64 max-w-prose overflow-y-auto">
 						{#if activeTab === 'bio'}
 							{#if data.bio}
 								<div class="prose prose-invert max-w-prose lg:prose-lg">

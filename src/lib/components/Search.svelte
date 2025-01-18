@@ -22,4 +22,10 @@
 	);
 </script>
 
-<Input type="search" bind:value={searchText} oninput={search} placeholder="type to search" />
+<Input
+	class="border-[1.5px] py-4"
+	type="search"
+	bind:value={searchText}
+	oninput={search}
+	placeholder="type something ...."
+/>
