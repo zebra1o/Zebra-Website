@@ -1,6 +1,6 @@
 ---
 title: Magister Bufo
-image: /media/images/magisterBufo22.webp
+image: /media/images/magisterbufo22.webp
 year: "2022"
 description: <p>ink on paper, 25x35</p>
 tags:
