@@ -1,8 +1,8 @@
 ---
-title: Testa di Porco
+title: Testa di Mulo
 image: /media/images/testadimulo24.webp
-year: "2019"
-description: <p>ink on paper, 21x29</p>
+year: "2024"
+description: <p>ink on paper, 25x29</p>
 tags:
   - pen
 has_model: false
