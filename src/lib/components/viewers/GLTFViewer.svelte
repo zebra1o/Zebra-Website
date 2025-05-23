@@ -13,6 +13,7 @@
 	import Loader from '../Loader.svelte';
 	import { PressedKeys } from 'runed';
 	import { useEventListener } from 'runed';
+	import { detectOptimalQuality } from '$lib/utils/quality-detector';
 
 	const props: ViewerProps = $props();
 	const keys = new PressedKeys();
@@ -275,7 +276,7 @@
 		try {
 			const gltf = await loader.loadAsync(url);
 
-			gltf.scene.traverse((node) => {
+			gltf.scene.traverse((node: THREE.Object3D) => {
 				if (node instanceof THREE.Mesh) {
 					node.frustumCulled = true;
 					node.castShadow = $viewerSettings.global.shadows;
@@ -358,19 +359,19 @@
 		}
 
 		if (scene) {
-			scene.traverse((object) => {
+			scene.traverse((object: THREE.Object3D) => {
 				if (object instanceof THREE.Mesh) {
 					if (object.geometry) {
 						object.geometry.dispose();
 					}
 					if (object.material) {
 						if (Array.isArray(object.material)) {
-							object.material.forEach((material) => {
-								if (material.map) material.map.dispose();
+							object.material.forEach((material: THREE.Material) => {
+								if ((material as any).map) (material as any).map.dispose();
 								material.dispose();
 							});
 						} else {
-							if (object.material.map) object.material.map.dispose();
+							if ((object.material as any).map) (object.material as any).map.dispose();
 							object.material.dispose();
 						}
 					}
@@ -455,7 +456,7 @@
 		state.renderer.shadowMap.enabled = $viewerSettings.global.shadows;
 
 		// Update all meshes in the scene
-		scene.traverse((node) => {
+		scene.traverse((node: THREE.Object3D) => {
 			if (node instanceof THREE.Mesh) {
 				node.castShadow = $viewerSettings.global.shadows;
 				node.receiveShadow = $viewerSettings.global.shadows;
@@ -496,6 +497,19 @@
 
 	onMount(() => {
 		$viewerSettings.visible = false;
+		// Auto-detect and set quality on first load if still default
+		if ($viewerSettings.global.qualityPreset === 'default') {
+			const detected = detectOptimalQuality();
+			if (detected !== 'default') {
+				viewerSettings.update((settings) => ({
+					...settings,
+					global: {
+						...settings.global,
+						qualityPreset: detected
+					}
+				}));
+			}
+		}
 		if (!props.modelUrl) return;
 
 		initScene();
@@ -565,7 +579,7 @@
 		initPostProcessing();
 
 		// Update all meshes in the scene
-		scene.traverse((node) => {
+		scene.traverse((node: THREE.Object3D) => {
 			if (node instanceof THREE.Mesh) {
 				node.castShadow = $viewerSettings.global.shadows && currentQuality.meshes.castShadow;
 				node.receiveShadow = $viewerSettings.global.shadows && currentQuality.meshes.receiveShadow;
@@ -598,16 +612,16 @@
 		if (!scene) return;
 
 		const preset = materialPresets[$viewerSettings.global.materialPreset];
-		scene.traverse((node) => {
+		scene.traverse((node: THREE.Object3D) => {
 			if (node instanceof THREE.Mesh) {
 				if (Array.isArray(node.material)) {
-					node.material.forEach((mat) => {
+					node.material.forEach((mat: THREE.Material) => {
 						if (mat instanceof THREE.MeshStandardMaterial) {
 							mat.roughness = preset.roughness;
 							mat.metalness = preset.metalness;
 							mat.envMapIntensity = preset.envMapIntensity;
-							if ('transparent' in preset) mat.transparent = preset.transparent;
-							if ('opacity' in preset) mat.opacity = preset.opacity;
+							if ('transparent' in preset) (mat as any).transparent = preset.transparent;
+							if ('opacity' in preset) (mat as any).opacity = preset.opacity;
 							mat.needsUpdate = true;
 						}
 					});
@@ -615,8 +629,8 @@
 					node.material.roughness = preset.roughness;
 					node.material.metalness = preset.metalness;
 					node.material.envMapIntensity = preset.envMapIntensity;
-					if ('transparent' in preset) node.material.transparent = preset.transparent;
-					if ('opacity' in preset) node.material.opacity = preset.opacity;
+					if ('transparent' in preset) (node.material as any).transparent = preset.transparent;
+					if ('opacity' in preset) (node.material as any).opacity = preset.opacity;
 					node.material.needsUpdate = true;
 				}
 			}

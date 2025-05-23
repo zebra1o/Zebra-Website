@@ -45,13 +45,12 @@
 		"vite": "^5.4.19"
 	},
 	"dependencies": {
-		"@types/three": "^0.170.0",
 		"@zoom-image/svelte": "^0.3.1",
 		"flexsearch": "^0.7.43",
 		"gsap": "^3.13.0",
 		"runed": "^0.23.4",
 		"slug": "^10.0.0",
-		"three": "^0.170.0"
+		"three": "^0.176.0"
 	},
 	"packageManager": "pnpm@10.11.0",
 	"engines": {
