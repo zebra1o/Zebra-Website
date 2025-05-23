@@ -11,5 +11,7 @@
 	>
 		<img alt="logo_3d" src={logo_3d} width="100" height="100" />
 	</button>
-	<ViewerSettings />
+	{#if $viewerSettings.visible}
+		<ViewerSettings />
+	{/if}
 {/if}
