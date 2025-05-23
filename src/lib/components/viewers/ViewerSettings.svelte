@@ -92,7 +92,7 @@
 				<div class="mb-4 space-y-1.5">
 					<h2 class="text-base uppercase tracking-[0.2em]">Viewer Settings</h2>
 					<div class="space-y-0.5 text-[10px] text-neutral-400">
-						<p>• Press L and move mouse to change lights position</p>
+						<p>• Press L and move mouse to move lights</p>
 						<p>• Lock lights settings for simplified controls</p>
 						<p>• Just have fun</p>
 					</div>
