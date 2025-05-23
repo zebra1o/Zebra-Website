@@ -1,12 +1,20 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
+	// @ts-ignore
 	import * as THREE from 'three';
-	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-	import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-	import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+	// Import three.js examples as modules (not types)
+	// @ts-ignore
+	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+	// @ts-ignore
+	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+	// @ts-ignore
+	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+	// @ts-ignore
+	import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+	// @ts-ignore
+	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+	// @ts-ignore
+	import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 	import type { ViewerProps } from '$lib/types';
 	import { viewerSettings } from '$lib/stores/viewer-settings';
 	import { materialPresets, qualityPresets } from '$lib/stores/quality-presets';
@@ -495,25 +503,105 @@
 		}
 	}
 
+	function applyAllSettings() {
+		if (!scene || !state.renderer) return;
+
+		const currentQuality = qualityPresets[$viewerSettings.global.qualityPreset];
+
+		// Update renderer settings
+		state.renderer.setPixelRatio(currentQuality.renderer.pixelRatio);
+		if (state.renderer.shadowMap.type !== currentQuality.renderer.shadowMap.type) {
+			state.renderer.shadowMap.type = currentQuality.renderer.shadowMap.type;
+			state.renderer.shadowMap.needsUpdate = true;
+		}
+		state.renderer.shadowMap.enabled = $viewerSettings.global.shadows;
+
+		// Update post-processing
+		initPostProcessing();
+
+		// Update all meshes in the scene
+		scene.traverse((node: THREE.Object3D) => {
+			if (node instanceof THREE.Mesh) {
+				node.castShadow = $viewerSettings.global.shadows && currentQuality.meshes.castShadow;
+				node.receiveShadow = $viewerSettings.global.shadows && currentQuality.meshes.receiveShadow;
+				node.frustumCulled = currentQuality.meshes.frustumCulled;
+
+				// Update material preset
+				const preset = materialPresets[$viewerSettings.global.materialPreset];
+				if (Array.isArray(node.material)) {
+					node.material.forEach((mat: THREE.Material) => {
+						if (mat instanceof THREE.MeshStandardMaterial) {
+							mat.roughness = preset.roughness;
+							mat.metalness = preset.metalness;
+							mat.envMapIntensity = preset.envMapIntensity;
+							if ('transparent' in preset) (mat as any).transparent = preset.transparent;
+							if ('opacity' in preset) (mat as any).opacity = preset.opacity;
+							mat.needsUpdate = true;
+						}
+					});
+				} else if (node.material instanceof THREE.MeshStandardMaterial) {
+					node.material.roughness = preset.roughness;
+					node.material.metalness = preset.metalness;
+					node.material.envMapIntensity = preset.envMapIntensity;
+					if ('transparent' in preset) (node.material as any).transparent = preset.transparent;
+					if ('opacity' in preset) (node.material as any).opacity = preset.opacity;
+					node.material.needsUpdate = true;
+				}
+			}
+		});
+
+		// Update lights
+		if (state.lights) {
+			Object.entries(state.lights).forEach(([type, light], index) => {
+				// Handle rim light visibility in low quality mode
+				if (currentQuality.lights.maxLights === 2 && type === 'rim') {
+					light.intensity = 0;
+					return;
+				}
+
+				const settings = $viewerSettings.lights[type as keyof typeof $viewerSettings.lights];
+				light.intensity = settings.intensity * $viewerSettings.global.lightIntensity;
+				light.color.set(settings.color);
+				(light as THREE.PointLight).distance = settings.distance * 5;
+				light.castShadow = $viewerSettings.global.shadows;
+				if (light.castShadow) {
+					light.shadow.bias = currentQuality.lights.shadowBias;
+					light.shadow.radius = currentQuality.lights.shadowRadius;
+					light.shadow.mapSize.width = currentQuality.renderer.shadowMap.mapSize;
+					light.shadow.mapSize.height = currentQuality.renderer.shadowMap.mapSize;
+					light.shadow.needsUpdate = true;
+				}
+				const pos = new THREE.Vector3(
+					settings.position.x,
+					settings.position.y,
+					settings.position.z
+				).normalize();
+				light.position.copy(
+					pos.multiplyScalar(settings.distance * $viewerSettings.global.centerDistance * 0.5)
+				);
+			});
+		}
+
+		// Update helpers
+		state.lightHelpers.forEach((helper) => {
+			helper.visible = $viewerSettings.global.showHelpers;
+			helper.update();
+		});
+
+		// Update bloom pass
+		if (state.bloomPass) {
+			state.bloomPass.enabled = $viewerSettings.global.bloom;
+		}
+	}
+
 	onMount(() => {
 		$viewerSettings.visible = false;
-		// Auto-detect and set quality on first load if still default
-		if ($viewerSettings.global.qualityPreset === 'default') {
-			const detected = detectOptimalQuality();
-			if (detected !== 'default') {
-				viewerSettings.update((settings) => ({
-					...settings,
-					global: {
-						...settings.global,
-						qualityPreset: detected
-					}
-				}));
-			}
-		}
 		if (!props.modelUrl) return;
 
 		initScene();
-		loadGLTF(props.modelUrl);
+		loadGLTF(props.modelUrl).then(() => {
+			applyAllSettings();
+		});
 
 		observer = new IntersectionObserver(
 			(entries) => {

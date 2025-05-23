@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { viewerSettings, defaultSettings } from '$lib/stores/viewer-settings';
+	import {
+		viewerSettings,
+		defaultSettings,
+		createInitialSettings
+	} from '$lib/stores/viewer-settings';
 	import { Draggable } from '$lib/gsap.config';
 	import { Slider } from '$lib/components/ui/slider';
 	import { Switch } from '$lib/components/ui/switch';
@@ -13,6 +17,7 @@
 	} from '$lib/stores/quality-presets';
 	// import { Select, SelectContent, SelectItem, SelectTrigger, SelectGroup } from '../ui/select';
 	import * as Select from '$lib/components/ui/select';
+	import { detectOptimalQuality } from '$lib/utils/quality-detector';
 
 	type LightType = 'key' | 'fill' | 'rim';
 
@@ -59,8 +64,10 @@
 	});
 
 	function resetSettings() {
-		$viewerSettings = structuredClone(defaultSettings);
-		$viewerSettings.visible = true;
+		$viewerSettings = {
+			...createInitialSettings(),
+			visible: true
+		};
 	}
 
 	const materialPresetOptions = Object.entries(materialPresets).map(([id, preset]) => ({

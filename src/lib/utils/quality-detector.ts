@@ -45,7 +45,7 @@ export function detectOptimalQuality(): QualityPreset {
 		case 'low':
 			return 'low';
 		case 'high':
-			return capabilities.pixelRatio > 1.5 ? 'high' : 'default';
+			return 'default';
 		default:
 			return 'default';
 	}

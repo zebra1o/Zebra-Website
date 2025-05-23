@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 import type { MaterialPreset } from './quality-presets';
+import { detectOptimalQuality } from '$lib/utils/quality-detector';
+import { qualityPresets } from './quality-presets';
 
 export interface LightSettings {
 	color: string;
@@ -65,4 +67,42 @@ export const defaultSettings: ViewerSettings = {
 	}
 };
 
-export const viewerSettings = writable<ViewerSettings>(structuredClone(defaultSettings));
+export function createInitialSettings(): ViewerSettings {
+	const detectedQuality = detectOptimalQuality();
+	const preset = qualityPresets[detectedQuality];
+
+	return {
+		visible: false,
+		lights: {
+			key: {
+				color: '#ffffff',
+				intensity: 50.0 * preset.lights.intensity,
+				distance: 15,
+				position: { ...preset.lights.positions.key }
+			},
+			fill: {
+				color: '#ffffff',
+				intensity: 25.0 * preset.lights.intensity,
+				distance: 15,
+				position: { ...preset.lights.positions.fill }
+			},
+			rim: {
+				color: '#ffffff',
+				intensity: 15.0 * preset.lights.intensity,
+				distance: 15,
+				position: { ...preset.lights.positions.rim }
+			}
+		},
+		global: {
+			centerDistance: 5,
+			bloom: false,
+			showHelpers: false,
+			lightIntensity: preset.lights.intensity,
+			shadows: preset.features.shadows,
+			qualityPreset: detectedQuality,
+			materialPreset: preset.meshes.materialPreset
+		}
+	};
+}
+
+export const viewerSettings = writable<ViewerSettings>(createInitialSettings());
