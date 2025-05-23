@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		viewerSettings,
-		defaultSettings,
-		createInitialSettings
-	} from '$lib/stores/viewer-settings';
+	import { viewerSettings, createInitialSettings } from '$lib/stores/viewer-settings';
 	import { Draggable } from '$lib/gsap.config';
 	import { Slider } from '$lib/components/ui/slider';
 	import { Switch } from '$lib/components/ui/switch';
@@ -15,9 +11,7 @@
 		type MaterialPreset,
 		materialPresets
 	} from '$lib/stores/quality-presets';
-	// import { Select, SelectContent, SelectItem, SelectTrigger, SelectGroup } from '../ui/select';
 	import * as Select from '$lib/components/ui/select';
-	import { detectOptimalQuality } from '$lib/utils/quality-detector';
 
 	type LightType = 'key' | 'fill' | 'rim';
 
@@ -354,7 +348,7 @@
 	</div>
 {/if}
 
-<style>
+<style lang="postcss">
 	:global(.slider-white) {
 		--thumb-color: white;
 		--track-color: rgba(255, 255, 255, 0.1);

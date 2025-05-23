@@ -1,19 +1,11 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	// @ts-ignore
 	import * as THREE from 'three';
-	// Import three.js examples as modules (not types)
-	// @ts-ignore
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-	// @ts-ignore
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-	// @ts-ignore
 	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-	// @ts-ignore
 	import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-	// @ts-ignore
 	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-	// @ts-ignore
 	import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 	import type { ViewerProps } from '$lib/types';
 	import { viewerSettings } from '$lib/stores/viewer-settings';
