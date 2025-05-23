@@ -6,7 +6,6 @@
 	import Search from './Search.svelte';
 	import SearchIcon from 'lucide-svelte/icons/search';
 	import X from 'lucide-svelte/icons/x';
-	import { ScrollArea } from './ui/scroll-area';
 
 	let { tags, bg_image }: { tags: string[]; bg_image?: string } = $props();
 
@@ -32,7 +31,7 @@
 				{/if}
 			</div>
 		{/if}
-		<SearchIcon class="size-7 stroke-[1.5px]" />
+		<SearchIcon class="size-7 stroke-[1.5px] drop-shadow-[2px_2px_2px_rgba(0,0,0,0.8)]" />
 	</Sheet.Trigger>
 	<Sheet.Content class="flex flex-col gap-4 rounded-lg border border-primary" side="right">
 		<div class="z-50 flex flex-col gap-4 overflow-y-auto">
@@ -41,7 +40,7 @@
 				<Sheet.Close
 					class="transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"
 				>
-					<X class="size-9 stroke-[1.5px]" />
+					<X class="size-9 stroke-[1.5px] drop-shadow-[2px_2px_2px_rgba(0,0,0,0.8)]" />
 					<span class="sr-only">Close</span>
 				</Sheet.Close>
 			</div>

@@ -13,7 +13,6 @@
 	import Loader from '../Loader.svelte';
 	import { PressedKeys } from 'runed';
 	import { useEventListener } from 'runed';
-	import { detectOptimalQuality } from '$lib/utils/quality-detector';
 
 	const props: ViewerProps = $props();
 	const keys = new PressedKeys();

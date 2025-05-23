@@ -39,7 +39,7 @@
 	<div
 		id="info"
 		bind:this={infoElement}
-		class="fixed inset-x-0 bottom-3 left-3 z-50 max-w-xs border-collapse rounded-xl bg-black/20 backdrop-blur-sm sm:bottom-8 sm:left-8 sm:max-w-2xl"
+		class="fixed inset-x-0 bottom-3 left-3 z-50 max-w-xs border-collapse rounded-xl bg-black/40 backdrop-blur-sm sm:bottom-8 sm:left-8 sm:max-w-2xl"
 	>
 		<div
 			class="max-h-[50vh] overflow-y-auto p-3 text-white [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-6 [&::-webkit-scrollbar]:hidden"
