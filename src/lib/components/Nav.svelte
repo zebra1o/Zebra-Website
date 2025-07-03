@@ -21,7 +21,7 @@
 		width="64"
 		height="64"
 		alt={`${global.title} Logo`}
-		class="h-16 w-16 object-contain"
+		class="h-16 w-16 object-contain pixelated"
 	/>
 </Button>
 

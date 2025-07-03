@@ -14,7 +14,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-cloudflare": "^4.9.0",
 		"@sveltejs/enhanced-img": "^0.4.4",
-		"@sveltejs/kit": "^2.21.1",
+		"@sveltejs/kit": "^2.22.2",
 		"@sveltejs/vite-plugin-svelte": "^4.0.4",
 		"@tailwindcss/typography": "^0.5.16",
 		"@types/eslint": "^9.6.1",
@@ -23,29 +23,29 @@
 		"autoprefixer": "^10.4.21",
 		"bits-ui": "1.0.0-next.77",
 		"clsx": "^2.1.1",
-		"eslint": "^9.27.0",
+		"eslint": "^9.30.1",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.46.1",
 		"globals": "^15.15.0",
 		"gsplat": "^1.2.4",
 		"lucide-svelte": "^0.469.0",
 		"mdsvex": "^0.11.2",
-		"prettier": "^3.5.3",
+		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
-		"prettier-plugin-tailwindcss": "^0.6.11",
-		"svelte": "^5.33.1",
-		"svelte-check": "^4.2.1",
+		"prettier-plugin-tailwindcss": "^0.6.13",
+		"svelte": "^5.35.1",
+		"svelte-check": "^4.2.2",
 		"sveltekit-search-params": "4.0.0-next.0",
 		"tailwind-merge": "^2.6.0",
 		"tailwind-variants": "^0.3.1",
 		"tailwindcss": "^3.4.17",
 		"tailwindcss-animate": "^1.0.7",
 		"typescript": "^5.8.3",
-		"typescript-eslint": "^8.32.1",
+		"typescript-eslint": "^8.35.1",
 		"vite": "^5.4.19"
 	},
 	"dependencies": {
-		"@zoom-image/svelte": "^0.3.1",
+		"@zoom-image/svelte": "^0.3.4",
 		"flexsearch": "^0.7.43",
 		"gsap": "^3.13.0",
 		"runed": "^0.23.4",
@@ -55,5 +55,11 @@
 	"packageManager": "pnpm@10.11.0",
 	"engines": {
 		"node": ">=20.0.0"
+	},
+	"pnpm": {
+		"overrides": {
+			"@img/sharp-libvips-darwin-arm64": "1.1.0",
+			"sharp": "0.34.2"
+		}
 	}
 }

@@ -53,7 +53,7 @@
 				loading="lazy"
 				src={data.avatar as string}
 				alt="About"
-				class="z-50 h-full max-h-40 w-auto object-contain"
+				class="z-50 h-full max-h-40 w-auto object-contain pixelated"
 			/>
 		{/if}
 
