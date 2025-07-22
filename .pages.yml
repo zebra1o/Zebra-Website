@@ -43,10 +43,8 @@ content:
         label: Tags
         type: select
         required: false
-        list:
-          min: 1
-          max: 4
         options:
+          multiple: true
           values:
             [
               { value: 3d, label: '3D' },
@@ -85,7 +83,7 @@ content:
             ]
       - name: model_file
         label: 'Model File'
-        type: image
+        type: file
         required: false
         options:
           path: static/media/models
@@ -191,7 +189,6 @@ content:
     type: file
     path: 'src/lib/db/global.json'
     format: json
-    icon: user
     fields:
       - name: title
         label: 'Site Title'
