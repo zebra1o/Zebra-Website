@@ -10,5 +10,5 @@ tags:
   - sculpture
 has_model: true
 model_format: glb
-model_file: /media/models/vasomostro_def1_EXPORTGLTF.glb
+model_file: /media/models/vasomostro_def1_EXPORTGLTF_1.glb
 ---
