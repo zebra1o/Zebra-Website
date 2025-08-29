@@ -305,19 +305,19 @@
 			gltf.scene.position.sub(center);
 
 			// Scale model to a larger size (8 units)
-			const scale = 8 / maxDim;
-			gltf.scene.scale.multiplyScalar(scale);
+			// const scale = 8 / maxDim;
+			// gltf.scene.scale.multiplyScalar(scale);
 
 			scene.add(gltf.scene);
 
 			// Set initial camera position based on model size
-			const initialDistance = maxDim * scale * 1.5;
-			camera.position.set(initialDistance, initialDistance * 0.8, initialDistance);
+			// const initialDistance = maxDim * scale * 1.5;
+			camera.position.set(maxDim, maxDim * 0.5, maxDim);
 			controls.target.set(0, 0, 0);
 
 			// Set control limits based on model size
-			controls.maxDistance = initialDistance * 3;
-			controls.minDistance = initialDistance * 0.2;
+			controls.maxDistance = maxDim * 3;
+			controls.minDistance = maxDim * 0.2;
 			controls.update();
 		} catch (error) {
 			state.error = error instanceof Error ? error.message : 'Failed to load model';
@@ -335,6 +335,7 @@
 			material.roughness = material.roughness || 0.8;
 			material.metalness = material.metalness || 0.2;
 			material.envMapIntensity = 1;
+			material.depthWrite = true;
 
 			// Keep original maps if they exist
 			if (material.map) {
