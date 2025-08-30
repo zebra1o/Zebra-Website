@@ -1,8 +1,8 @@
 {
-	"title": "Zebra",
-	"description": "Zebra is an artist.",
-	"keywords": "art, 3D, illustration, portfolio, zebra",
-	"logo": "/media/global/Z_logo.svg",
-	"filter_bg": "/media/global/filter_bg_image.png",
-	"logo_3d": "/media/global/cube3d_100px.gif"
+  "title": "Zebra",
+  "description": "dark desktop",
+  "keywords": "art, 3D, illustration, portfolio, zebra",
+  "logo": "/media/global/Z_logo.svg",
+  "filter_bg": "/media/global/filter_bg_image.png",
+  "logo_3d": "/media/global/cube3d_100px.gif"
 }
