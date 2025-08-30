@@ -1,6 +1,6 @@
 ---
 title: Baked Coral
-image: /media/images/vaso_web1.webp
+image: /media/images/anteprima_website-1.webp
 year: "2025"
 description: <p>Unbaked Clay Pot made by Lorena Tronnolone.<br>3D scan, remesh,
   texturing e animation made by Zebra<br><br>scaniverse - blender - substance
