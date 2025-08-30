@@ -11,5 +11,5 @@ tags:
   - sculpture
 has_model: true
 model_format: glb
-model_file: /media/models/vasomostro_def1_3.glb
+model_file: /media/models/VASO NUOVO.glb
 ---
