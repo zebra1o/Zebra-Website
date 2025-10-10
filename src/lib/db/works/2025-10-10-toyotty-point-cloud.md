@@ -6,6 +6,6 @@ description: <p>Point Cloud scan made w/ Scaniverse</p>
 tags:
   - 3d
 has_model: true
-model_format: ply
-model_file: /media/models/toyotty.ply
+model_format: glb
+model_file: /media/models/toyotty.glb
 ---
