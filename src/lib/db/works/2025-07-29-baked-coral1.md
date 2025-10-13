@@ -11,5 +11,5 @@ tags:
   - sculpture
 has_model: true
 model_format: glb
-model_file: /media/models/VASO NUOVO.glb
+model_file: /media/models/VASO_RIFATTO_11.11.glb
 ---
