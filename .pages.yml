@@ -59,7 +59,7 @@ content:
               { value: digital, label: 'Digital' },
               { value: extra, label: 'Extra' },
               { value: illustration, label: 'Illustration' },
-              { value: mixed_media, label: 'Mixed Media' },
+              { value: mixed media, label: 'Mixed Media' },
               { value: gsplat, label: 'Gsplat' },
               { value: ink, label: 'Ink' }
             ]
